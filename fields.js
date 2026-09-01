@@ -1146,6 +1146,7 @@ window.SHACKADEMY_FIELDS = [
         <li><strong>Fixed with Inflation</strong> - Limits the withdrawals to a maximum of this fixed value if needed in the plan and also inflates the value over time.*</li>
         <li><strong>Fixed without inflation</strong> - Limits the withdrawals to a maximum of this fixed value if needed in the plan and does not inflate the value over time.*</li>
         <li><strong>Max without penalty</strong> - For bonds there is an additional option of Maximum withdrawals without penalty. This means it will limits the withdrawals to the 5%/ year for 20 years where available and if needed in the plan. *</li>
+        <li><strong>Max within Basic/Intermediate Tax Band</strong> - For DC pensions, within Planned Withdrawals, you can ask Voyant to drawdown taxable income to use up the owner's basic rate tax band. Refer to the linked lesson in the sidebar for more details.</li>
       </ul>
       <p>*Note: These payments are the maximum amount Voyant is allowed to take from the account. The withdrawals will not be used if, for example, there isn't a shortfall to be met by using savings.</p>
     `,

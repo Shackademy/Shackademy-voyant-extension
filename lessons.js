@@ -115,6 +115,11 @@ window.SHACKADEMY_LESSONS = {
     url: "https://shackademy.com/path-player?courseid=voyant&unit=67c8dfa058ae6fc357008ab5Unit",
   },
 
+  "utilising-tax-bands": {
+    title: "Utilising Tax Bands in Retirement",
+    url: "https://shackademy.com/path-player?courseid=voyant&unit=6a974e76e46f65c9fc09f4d7Unit",
+  },
+
   "estate-plan": {
     title: "Voyant Help - Entering an Estate Plan",
     url: "https://support.planwithvoyant.com/hc/en-us/articles/49450955718811-How-to-add-an-Estate-Plan-UK",

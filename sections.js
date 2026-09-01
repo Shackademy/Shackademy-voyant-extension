@@ -1343,7 +1343,11 @@ window.SHACKADEMY_SECTIONS = {
   "planned-withdrawals": {
     name: "Planned Withdrawals",
     typeIndicator: "drawdownInputName",
-    lessons: ["managing-withdrawals", "pension-withdrawals"],
+    lessons: [
+      "managing-withdrawals",
+      "pension-withdrawals",
+      "utilising-tax-bands",
+    ],
     tabs: {
       basics: {
         description: `
