@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Shackademy longevity harness</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; background: #fafafa; color: #2b2e33; }
+  header { background: #2b2e33; color: #fff; padding: 14px 20px; }
+  header h1 { margin: 0; font-size: 16px; }
+  header p { margin: 4px 0 0; font-size: 12px; color: #b9c0c7; }
+  .wrap { display: flex; gap: 18px; padding: 18px; align-items: flex-start; }
+  .col { background: #fff; border: 1px solid #e6e6e6; border-radius: 8px; padding: 14px; }
+  .col.wide { flex: 1; min-width: 0; }
+  .col.side { width: 300px; flex-shrink: 0; padding: 0; overflow: hidden; }
+  .col h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+            color: #999; margin: 0 0 10px; }
+  table { border-collapse: collapse; font-size: 12px; width: 100%; }
+  th, td { padding: 3px 8px; text-align: right; border-bottom: 1px solid #f2f2f2; }
+  th { color: #888; font-weight: 600; text-align: right; position: sticky; top: 0;
+       background: #fff; }
+  th:first-child, td:first-child { text-align: left; }
+  tr.capped td { background: #fff8f0; }
+  .scroll { max-height: 420px; overflow-y: auto; }
+  .pass { color: #17a87c; font-weight: 700; }
+  .fail { color: #c62828; font-weight: 700; }
+  .note { color: #777; }
+  #chartHost { position: absolute; left: -99999px; top: 0; }
+  .legend span { display: inline-block; margin-right: 14px; font-size: 12px; }
+  .swatch { display: inline-block; width: 22px; height: 3px; vertical-align: middle;
+            margin-right: 5px; }
+  canvas { width: 100%; height: 260px; display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Shackademy longevity harness</h1>
+  <p>Runs the real parsing and survival maths against the sample plan. No extension, no Voyant login.</p>
+</header>
+
+<!-- The fixture chart is built here, off-screen. The parser reads it exactly
+     as it would read the real page. -->
+<div id="chartHost"></div>
+
+<div class="wrap">
+  <div class="col wide">
+    <h2>Curves</h2>
+    <div class="legend">
+      <span><i class="swatch" style="background:#026FC1"></i>Voyant: probability of success</span>
+      <span><i class="swatch" style="background:#C2185B"></i>Longevity-adjusted</span>
+      <span><i class="swatch" style="background:#7B8794"></i>Chance either is alive</span>
+    </div>
+    <canvas id="plot"></canvas>
+
+    <h2 style="margin-top:18px">Year by year</h2>
+    <div class="scroll">
+      <table id="tbl">
+        <thead><tr>
+          <th>Ages</th><th>Voyant PoS</th><th>Either alive</th>
+          <th>Both alive</th><th>Adjusted</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col side">
+    <h2 style="padding:14px 14px 0">Sidebar preview</h2>
+    <div id="shackademy-longevity-content"></div>
+  </div>
+
+  <div class="col" style="width:330px;flex-shrink:0">
+    <h2>Checks</h2>
+    <div id="checks" style="font-size:12px;line-height:1.7"></div>
+  </div>
+</div>
+
+<script src="../mortality-data.js"></script>
+<script src="../longevity.js"></script>
+<script src="fixture.js"></script>
+<script src="../longevity-ui.js"></script>
+<link rel="stylesheet" href="../styles.css">
+
+<script>
+// chrome.storage does not exist outside an extension; stub it so the UI module
+// behaves identically here to how it will in Chrome.
+window.chrome = window.chrome || {
+  storage: { local: { get: (k, cb) => cb({}), set: () => {} } },
+};
+
+document.getElementById("chartHost")
+  .appendChild(SHACKADEMY_FIXTURE.build(document));
+
+const L = window.SHACKADEMY_LONGEVITY;
+const chart = L.parseChart(document);
+const result = L.computeSurvival(chart, {
+  nation: "uk",
+  genders: { 0: "m", 1: "f" },
+  currentYear: 2026,
+});
+const summary = L.summarise(result);
+
+// --- table ---------------------------------------------------------------
+const tbody = document.querySelector("#tbl tbody");
+result.series.forEach((r) => {
+  const tr = document.createElement("tr");
+  if (r.anyCapped) tr.className = "capped";
+  tr.innerHTML =
+    `<td>${chart.people.map((p, i) => p.name + " " + r.ages[i]).join(", ")}</td>` +
+    `<td>${r.pos.toFixed(0)}%</td>` +
+    `<td>${(r.lastSurvivor * 100).toFixed(1)}%</td>` +
+    `<td>${(r.bothAlive * 100).toFixed(1)}%</td>` +
+    `<td>${r.adjusted.toFixed(1)}%</td>`;
+  tbody.appendChild(tr);
+});
+
+// --- plot ----------------------------------------------------------------
+(function plot() {
+  const c = document.getElementById("plot");
+  const dpr = window.devicePixelRatio || 1;
+  c.width = c.clientWidth * dpr;
+  c.height = 260 * dpr;
+  const ctx = c.getContext("2d");
+  ctx.scale(dpr, dpr);
+  const W = c.clientWidth, H = 260, pad = 30;
+  const n = result.series.length;
+  const X = (i) => pad + (i / (n - 1)) * (W - pad - 10);
+  const Y = (v) => H - pad - (v / 100) * (H - pad - 10);
+
+  ctx.strokeStyle = "#eee";
+  for (let v = 0; v <= 100; v += 25) {
+    ctx.beginPath(); ctx.moveTo(pad, Y(v)); ctx.lineTo(W - 10, Y(v)); ctx.stroke();
+    ctx.fillStyle = "#aaa"; ctx.font = "10px Arial";
+    ctx.fillText(v + "%", 2, Y(v) + 3);
+  }
+  const line = (vals, colour, dash) => {
+    ctx.beginPath();
+    ctx.setLineDash(dash || []);
+    ctx.strokeStyle = colour; ctx.lineWidth = 2;
+    vals.forEach((v, i) => (i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))));
+    ctx.stroke();
+    ctx.setLineDash([]);
+  };
+  line(result.series.map((r) => r.pos), "#026FC1");
+  line(result.series.map((r) => r.lastSurvivor * 100), "#7B8794", [5, 4]);
+  line(result.series.map((r) => r.adjusted), "#C2185B");
+})();
+
+// --- sidebar preview -----------------------------------------------------
+window.SHACKADEMY_LONGEVITY_UI.mount(
+  document.getElementById("shackademy-longevity-content"),
+);
+
+// --- checks --------------------------------------------------------------
+const checks = [];
+const add = (name, ok, detail) => checks.push({ name, ok, detail });
+
+add("Chart parsed", !!chart, chart ? chart.points.length + " points" : "");
+add("People named from axis", chart.people[0].name === "John" && chart.people[1].name === "Jane",
+    chart.people.map((p) => p.name + " " + p.startAge).join(", "));
+add("Mortality attributed", chart.people[0].planMortalityAge === 100, "John dies at 100");
+add("Adjusted never above Voyant's line",
+    result.series.every((r) => r.adjusted <= r.pos + 1e-9), "");
+add("Either-alive never below both-alive",
+    result.series.every((r) => r.lastSurvivor >= r.bothAlive - 1e-12), "");
+add("Survival only ever falls",
+    result.series.every((r, i, a) => i === 0 || r.lastSurvivor <= a[i - 1].lastSurvivor + 1e-12), "");
+add("ONS boundary detected", !!summary.boundary,
+    summary.boundary ? "from " + summary.boundary.ages.join(" / ") : "");
+add("Capping artefact under 2 points", summary.boundary.artefact < 0.02,
+    (summary.boundary.artefact * 100).toFixed(2) + " pts");
+
+document.getElementById("checks").innerHTML =
+  checks.map((c) =>
+    `<div><span class="${c.ok ? "pass" : "fail"}">${c.ok ? "PASS" : "FAIL"}</span> ` +
+    `${c.name}${c.detail ? ` <span class="note">- ${c.detail}</span>` : ""}</div>`).join("") +
+  `<hr style="border:none;border-top:1px solid #eee;margin:12px 0">` +
+  `<div><strong>Longevity-weighted success:</strong> ${summary.weighted.toFixed(1)}%</div>` +
+  `<div><strong>Voyant final PoS:</strong> ${summary.unadjustedFinal}%</div>` +
+  `<div class="note" style="margin-top:8px">Rows shaded orange are past the ONS data limit.</div>`;
+</script>
+</body>
+</html>

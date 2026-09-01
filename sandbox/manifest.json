@@ -1,0 +1,72 @@
+{
+  "manifest_version": 3,
+  "name": "Shackademy - Voyant Help (SANDBOX)",
+  "version": "1.3.0",
+  "description": "SANDBOX BUILD - do not use alongside the live extension. Adds longevity-adjusted Monte Carlo analysis using ONS cohort mortality data.",
+  "homepage_url": "https://shackademy.com/privacy",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Toggle Shackademy help (SANDBOX)",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.planwithvoyant.co.uk/*"
+      ],
+      "js": [
+        "fields.js",
+        "lessons.js",
+        "sections.js",
+        "mortality-data.js",
+        "longevity.js",
+        "longevity-ui.js",
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.planwithvoyant.co.uk/*"
+      ],
+      "js": [
+        "chart-inject.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "fields.js",
+        "lessons.js",
+        "sections.js",
+        "mortality-data.js",
+        "longevity.js",
+        "longevity-ui.js"
+      ],
+      "matches": [
+        "https://www.planwithvoyant.co.uk/*"
+      ]
+    }
+  ]
+}

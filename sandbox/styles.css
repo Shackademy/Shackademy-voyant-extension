@@ -1,0 +1,1097 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url("fonts/Montserrat-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ============================================================================
+   SHACKADEMY - VOYANT HELP STYLES
+   Brand colours: #1fcb97 (green), #2B2E33 (dark), #ffffff (white)
+   ============================================================================ */
+
+/* ── Field enhancement ──────────────────────────────────────────────────── */
+
+.shackademy-enhanced {
+  cursor: help;
+  position: relative;
+}
+
+.shackademy-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  background: #1fcb97;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.shackademy-enhanced:hover .shackademy-badge {
+  background: #17a87c;
+  transform: scale(1.15);
+}
+
+/* ── Backdrop ───────────────────────────────────────────────────────────── */
+
+#shackademy-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(43, 46, 51, 0.55);
+  z-index: 2147483645;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: shackademy-fade-in 0.15s ease;
+}
+
+/* ── Modal ──────────────────────────────────────────────────────────────── */
+
+#shackademy-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(680px, 92vw);
+  max-height: 85vh;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow:
+    0 4px 6px rgba(43, 46, 51, 0.04),
+    0 20px 60px rgba(43, 46, 51, 0.22);
+  z-index: 2147483647;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  color: #2b2e33;
+  animation: shackademy-slide-up 0.18s ease;
+}
+
+#shackademy-modal-header {
+  background: #2b2e33;
+  padding: 16px 20px 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#shackademy-modal-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1fcb97;
+}
+
+#shackademy-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+#shackademy-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s ease;
+}
+
+#shackademy-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Tabs ───────────────────────────────────────────────────────────────── */
+
+#shackademy-tabs {
+  display: flex;
+  border-bottom: 2px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.shackademy-tab {
+  flex: 1;
+  padding: 11px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: Arial, sans-serif;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.shackademy-tab:hover {
+  color: #2b2e33;
+}
+
+.shackademy-tab.active {
+  color: #1fcb97;
+  border-bottom-color: #1fcb97;
+  font-weight: 700;
+  background: #ffffff;
+}
+
+/* ── Modal body & panels ────────────────────────────────────────────────── */
+
+#shackademy-modal-body {
+  padding: 22px 24px;
+  overflow-y: auto;
+  max-height: calc(85vh - 130px);
+}
+
+.shackademy-panel {
+  display: none;
+}
+
+.shackademy-panel.active {
+  display: block;
+}
+
+.shackademy-panel p {
+  line-height: 1.65;
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* ── Formatted helpText content ─────────────────────────────────────────── */
+
+.shackademy-help-content h3 {
+  font-size: 11px;
+  font-weight: 700;
+  color: #2b2e33;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.shackademy-help-content h3:not(:first-child) {
+  margin-top: 18px;
+}
+
+.shackademy-help-content p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #444;
+  margin: 0 0 10px;
+}
+
+.shackademy-help-content ul,
+.shackademy-help-content ol {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.shackademy-help-content li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.shackademy-help-content ul li::marker {
+  color: #1fcb97;
+}
+
+.shackademy-help-content strong {
+  font-weight: 700;
+  color: #2b2e33;
+}
+
+.shackademy-help-content em {
+  font-style: italic;
+  color: #555;
+}
+
+.shackademy-panel iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 10px;
+  display: block;
+}
+
+/* ── Lesson link ────────────────────────────────────────────────────────── */
+
+.shackademy-links {
+  margin-top: 16px;
+}
+
+.shackademy-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: #1fcb97;
+  color: #ffffff;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: Arial, sans-serif;
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+
+.shackademy-links a:hover {
+  background: #17a87c;
+  transform: translateY(-1px);
+}
+
+/* ── Side panel ─────────────────────────────────────────────────────────── */
+
+#shackademy-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -4px 0 24px rgba(43, 46, 51, 0.14);
+  z-index: 2147483644;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  transition: transform 0.22s ease;
+  overflow: visible;
+}
+
+#shackademy-panel.hidden {
+  transform: translateX(100%);
+}
+
+#shackademy-panel-header {
+  background: #2b2e33;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+#shackademy-panel-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#shackademy-panel-logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #1fcb97;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+#shackademy-panel-close {
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 18px;
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+#shackademy-panel-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#shackademy-panel-subheader {
+  padding: 10px 16px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+#shackademy-panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.shackademy-panel-empty {
+  padding: 20px 16px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.shackademy-panel-item {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.shackademy-panel-field-btn {
+  width: 100%;
+  padding: 11px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+  transition: background 0.12s ease;
+}
+
+.shackademy-panel-field-btn:hover {
+  background: #f0fdf8;
+}
+
+.shackademy-panel-field-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2b2e33;
+}
+
+.shackademy-panel-field-badges {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.spf-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.spf-badge--lesson {
+  background: rgba(31, 203, 151, 0.12);
+  color: #17a87c;
+}
+
+.spf-badge--video {
+  background: rgba(43, 46, 51, 0.08);
+  color: #2b2e33;
+}
+
+#shackademy-panel-footer {
+  padding: 12px 16px;
+  border-top: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+#shackademy-panel-footer a {
+  font-size: 12px;
+  color: #1fcb97;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#shackademy-panel-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── Panel tab (attached to left edge of panel, always visible) ─────────── */
+
+#shackademy-panel-tab {
+  position: absolute;
+  top: 50%;
+  left: -32px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 64px;
+  background: #2b2e33;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -2px 0 12px rgba(43, 46, 51, 0.15);
+  transition:
+    background 0.15s ease,
+    width 0.15s ease;
+}
+
+#shackademy-panel-tab:hover {
+  background: #1fcb97;
+  width: 36px;
+  left: -36px;
+}
+
+#shackademy-panel-tab span {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: Arial, sans-serif;
+}
+
+/* ── Animations ─────────────────────────────────────────────────────────── */
+
+@keyframes shackademy-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shackademy-slide-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 10px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* ── Tab nudge animation (plays once when fields are detected) ───────────── */
+
+#shackademy-panel-tab.shackademy-nudge {
+  animation: shackademy-nudge 1s ease forwards;
+}
+
+@keyframes shackademy-nudge {
+  0% {
+    background: #2b2e33;
+    width: 32px;
+    left: -32px;
+  }
+  25% {
+    background: #1fcb97;
+    width: 52px;
+    left: -52px;
+  }
+  60% {
+    background: #1fcb97;
+    width: 52px;
+    left: -52px;
+  }
+  100% {
+    background: #2b2e33;
+    width: 32px;
+    left: -32px;
+  }
+}
+
+/* ── Panel navigation tabs (Glossary / Fields) ──────────────────────────── */
+
+#shackademy-panel-nav {
+  display: flex;
+  border-bottom: 2px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.shackademy-panel-nav-btn {
+  flex: 1;
+  padding: 9px 8px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: Arial, sans-serif;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+  text-align: center;
+}
+
+.shackademy-panel-nav-btn:hover {
+  color: #2b2e33;
+}
+
+.shackademy-panel-nav-btn.active {
+  color: #1fcb97;
+  border-bottom-color: #1fcb97;
+  font-weight: 700;
+}
+
+/* ── Panel views ────────────────────────────────────────────────────────── */
+
+#shackademy-panel-views {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.shackademy-panel-view {
+  display: none;
+  height: 100%;
+}
+
+.shackademy-panel-view.active {
+  display: block;
+}
+
+/* ── Glossary section ───────────────────────────────────────────────────── */
+
+.shackademy-guide-section {
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.shackademy-guide-section-title {
+  padding: 12px 14px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #2b2e33;
+}
+
+.shackademy-section-title--lessons {
+  background: #1fcb97;
+  color: #ffffff;
+}
+
+.shackademy-section-title--guide {
+  background: #2b2e33;
+  color: #ffffff;
+}
+
+.shackademy-guide-item {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.shackademy-guide-term {
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: #2b2e33;
+  font-family: Arial, sans-serif;
+  transition: background 0.12s ease;
+}
+
+.shackademy-guide-term:hover {
+  background: #f0fdf8;
+}
+
+.shackademy-guide-term.open {
+  color: #1fcb97;
+  background: #f0fdf8;
+}
+
+.shackademy-guide-chevron {
+  font-size: 16px;
+  color: #ccc;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.shackademy-guide-term.open .shackademy-guide-chevron {
+  transform: rotate(90deg);
+  color: #1fcb97;
+}
+
+.shackademy-guide-definition {
+  padding: 0 14px 12px;
+  background: #fafffe;
+  border-top: 1px solid #e8fdf7;
+}
+
+.shackademy-guide-definition .shackademy-help-content h3 {
+  font-size: 10px;
+}
+
+.shackademy-guide-definition .shackademy-help-content p,
+.shackademy-guide-definition .shackademy-help-content li {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ── Legislative note ───────────────────────────────────────────────────── */
+
+.shackademy-legislative-note {
+  margin-top: 10px;
+  padding: 7px 10px;
+  background: #fffbeb;
+  border-left: 3px solid #f59e0b;
+  border-radius: 0;
+  font-size: 11px;
+  color: #92400e;
+  line-height: 1.5;
+}
+
+/* ── Lessons ────────────────────────────────────────────────────────────── */
+
+.shackademy-lesson-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-bottom: 1px solid #edfaf5;
+  text-decoration: none;
+  background: #f4fdf9;
+  transition: background 0.12s ease;
+}
+
+.shackademy-lesson-link:hover {
+  background: #e4f9f1;
+}
+
+.shackademy-lesson-icon {
+  font-size: 9px;
+  color: #1fcb97;
+  flex-shrink: 0;
+}
+
+.shackademy-lesson-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2b2e33;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.shackademy-lesson-arrow {
+  font-size: 12px;
+  color: #1fcb97;
+  flex-shrink: 0;
+}
+
+/* ── Context panel (section description & title) ────────────────────────── */
+
+.shackademy-context-title {
+  padding: 12px 14px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2b2e33;
+  border-bottom: 2px solid #1fcb97;
+  background: #f0fdf8;
+}
+
+.shackademy-context-description {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.shackademy-context-description p {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #444;
+  margin: 0 0 8px;
+}
+
+.shackademy-context-description p:last-child {
+  margin-bottom: 0;
+}
+
+.shackademy-context-description ul {
+  margin: 6px 0 8px;
+  padding-left: 18px;
+}
+
+.shackademy-context-description li {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 3px;
+}
+
+.shackademy-context-description ul li::marker {
+  color: #1fcb97;
+}
+
+.shackademy-context-description strong {
+  font-weight: 700;
+  color: #2b2e33;
+}
+
+/* ── Save button ─────────────────────────────────────────────────────────── */
+
+#shackademy-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: calc(100% - 24px);
+  margin: 10px 12px 2px;
+  padding: 9px 14px;
+  background: #1fcb97;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+#shackademy-save-btn:hover {
+  background: #17a87c;
+  transform: translateY(-1px);
+}
+
+#shackademy-save-icon {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+#shackademy-save-btn.shackademy-save-unavailable {
+  background: #aaa;
+  transform: none;
+}
+
+/* ── Pinned / floating panel states ─────────────────────────────────────── */
+
+#shackademy-panel.shackademy-pinned {
+  box-shadow: -2px 0 12px rgba(43, 46, 51, 0.08);
+}
+
+#shackademy-panel.shackademy-floating {
+  box-shadow: -4px 0 24px rgba(43, 46, 51, 0.18);
+}
+
+/* ── Pin button ──────────────────────────────────────────────────────────── */
+
+#shackademy-pin-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 13px;
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+#shackademy-pin-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+/* ── Modal max-height and scroll ────────────────────────────────────────── */
+
+#shackademy-modal {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#shackademy-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Modal disclaimer ───────────────────────────────────────────────────── */
+
+#shackademy-modal-disclaimer {
+  flex-shrink: 0;
+  background: #f4fdf9;
+  border-top: 2px solid #1fcb97;
+  padding: 10px 16px;
+}
+
+#shackademy-modal-disclaimer ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+#shackademy-modal-disclaimer li {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #2b2e33;
+  margin-bottom: 4px;
+}
+
+#shackademy-modal-disclaimer li:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Page footer disclaimer ─────────────────────────────────────────────── */
+
+#shackademy-disclaimer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483643;
+  background: #2b2e33;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  transition: right 0.22s ease;
+}
+
+#shackademy-disclaimer.shackademy-disclaimer--pinned {
+  right: 260px;
+}
+
+.shackademy-disclaimer-full {
+  padding: 10px 16px;
+}
+
+.shackademy-disclaimer-text {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #ccc;
+  flex: 1;
+}
+
+.shackademy-disclaimer-text strong,
+#shackademy-modal-disclaimer strong {
+  font-weight: 700;
+  color: inherit;
+}
+
+/* ── Longevity tab ──────────────────────────────────────────────────────── */
+/* Added by the longevity feature. Uses the existing panel palette:          */
+/* #1fcb97 accent, #2b2e33 text, #f0f0f0 borders.                            */
+
+#shackademy-longevity-content {
+  padding: 12px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: #2b2e33;
+}
+
+.shk-lng-section {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.shk-lng-section:last-of-type {
+  border-bottom: none;
+}
+
+.shk-lng-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.shk-lng-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.shk-lng-label {
+  font-weight: 600;
+  flex-shrink: 0;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shk-lng-seg {
+  display: flex;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.shk-lng-seg button {
+  border: none;
+  background: #fff;
+  color: #666;
+  font-family: inherit;
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.shk-lng-seg button:hover {
+  background: #f5f5f5;
+}
+
+.shk-lng-seg button.active {
+  background: #1fcb97;
+  color: #fff;
+  font-weight: 700;
+}
+
+.shk-lng-select {
+  font-family: inherit;
+  font-size: 11px;
+  padding: 4px 6px;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+  background: #fff;
+  color: #2b2e33;
+  max-width: 55%;
+}
+
+.shk-lng-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #666;
+  cursor: pointer;
+}
+
+.shk-lng-headline {
+  background: #f0fdf8;
+  border: 1px solid #d5f5e9;
+  border-radius: 7px;
+  padding: 12px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.shk-lng-headline-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #17a87c;
+  line-height: 1.1;
+}
+
+.shk-lng-headline-label {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.shk-lng-headline-sub {
+  font-size: 10px;
+  color: #888;
+  margin-top: 5px;
+}
+
+.shk-lng-stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.shk-lng-stats li {
+  padding: 3px 0;
+  line-height: 1.45;
+}
+
+.shk-lng-hint {
+  font-size: 10px;
+  color: #999;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.shk-lng-note,
+.shk-lng-warn {
+  font-size: 11px;
+  line-height: 1.5;
+  border-radius: 6px;
+  padding: 9px 10px;
+  margin-bottom: 12px;
+}
+
+.shk-lng-note {
+  background: #f7f7f7;
+  border-left: 3px solid #c9c9c9;
+  color: #555;
+}
+
+.shk-lng-warn {
+  background: #fff6e5;
+  border-left: 3px solid #e8a33d;
+  color: #7a5312;
+}
+
+.shk-lng-details {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.shk-lng-details summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 11px;
+  color: #17a87c;
+  list-style: revert;
+}
+
+.shk-lng-details p {
+  font-size: 11px;
+  line-height: 1.55;
+  color: #555;
+  margin: 8px 0;
+}
+
+.shk-lng-attrib {
+  font-size: 10px !important;
+  color: #999 !important;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 8px;
+}
