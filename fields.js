@@ -1070,7 +1070,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>Our suggestion is to use <strong>Entered Interest Rate</strong> for all accounts until you're familiar with the impact of changing to Portfolio/Holdings.</li>
-        <li>This field will be <strong>locked</strong> if you have toggled on 'Grow all savings and cash accounts using 100% cash allocation' within the Monte Carlo insight. To unlock it, navigate to the Monte Carlo analysis insight, click 'X Account(s) Affected' on the left hand side, and switch the toggle at the bottom of the pop up to 'No'</li>
+        <li>This field will be <strong>locked</strong> if you have toggled on 'Grow all savings and cash accounts using 100% cash allocation' within the Monte Carlo insight. To unlock it, navigate to the Monte Carlo analysis insight, click 'X Account(s) Affected' on the right hand side, and switch the toggle at the bottom of the pop up to 'No'</li>
       </ul>
     `,
   },
@@ -1532,7 +1532,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>Our suggestion is to use <strong>Entered Growth Rate</strong> for all accounts until you're familiar with the impact of changing to Portfolio/Holdings.</li>
-        <li>This field will be <strong>locked</strong> if you have toggled on 'Grow all investment and retirement accounts using asset allocation' within the Monte Carlo insight. To unlock it, navigate to the Monte Carlo analysis insight, click 'X Account(s) Affected' on the left hand side, and switch the toggle at the bottom of the pop up to 'No'</li>
+        <li>This field will be <strong>locked</strong> if you have toggled on 'Grow all investment and retirement accounts using asset allocation' within the Monte Carlo insight. To unlock it, navigate to the Monte Carlo analysis insight, click 'X Account(s) Affected' on the right hand side, and switch the toggle at the bottom of the pop up to 'No'</li>
       </ul>
     `,
   },
