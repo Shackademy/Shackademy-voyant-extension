@@ -904,3 +904,66 @@
   font-weight: 700;
   color: inherit;
 }
+
+/* ── Guide button on screen headings (e.g. each insight) ─────────────────── */
+
+.shackademy-guide-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+  padding: 3px 10px 3px 4px;
+  border: none;
+  border-radius: 999px;
+  background: #1fcb97;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+
+.shackademy-guide-btn:hover {
+  background: #17a87c;
+  transform: translateY(-1px);
+}
+
+.shackademy-guide-btn:focus-visible {
+  outline: 2px solid #2b2e33;
+  outline-offset: 2px;
+}
+
+.shackademy-guide-btn-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #1fcb97;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Brief highlight on the guide when the heading button is clicked */
+#shackademy-guide-content.shackademy-flash {
+  animation: shackademy-flash 1.2s ease;
+}
+
+@keyframes shackademy-flash {
+  0% {
+    background: transparent;
+  }
+  25% {
+    background: rgba(31, 203, 151, 0.18);
+  }
+  100% {
+    background: transparent;
+  }
+}

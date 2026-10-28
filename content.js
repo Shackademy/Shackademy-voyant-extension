@@ -24,6 +24,8 @@
   const BACKDROP_ID = "shackademy-backdrop";
   const PANEL_ID = "shackademy-panel";
   const BADGE_CLASS = "shackademy-badge";
+  const KEY_ATTR = "data-shackademy-key";
+  const GUIDE_BTN_CLASS = "shackademy-guide-btn";
   const KEEP_PANEL_OPEN_WITHOUT_FIELDS_TABS = new Set(
     Object.keys(window.TAB_LABELS || {}),
   );
@@ -31,11 +33,45 @@
   // ---------------------------------------------------------------------------
   // Data
   // ---------------------------------------------------------------------------
-  const fieldMap = new Map(
-    (window.SHACKADEMY_FIELDS || []).map((f) => [f.key, f]),
+  // A key can have more than one entry when Voyant reuses the same field ID
+  // on different forms (e.g. drawdownType). Entries with a `sections` array
+  // only apply in those sections; an entry without one is the fallback.
+  const fieldMap = new Map();
+  (window.SHACKADEMY_FIELDS || []).forEach((f) => {
+    if (!fieldMap.has(f.key)) fieldMap.set(f.key, []);
+    fieldMap.get(f.key).push(f);
+  });
+
+  // Entries matched by label text rather than ID, for fields whose IDs
+  // Voyant regenerates on every page load (e.g. Plan Settings > Fees).
+  // match: { section, tab, group, text }
+  const textMatchedFields = (window.SHACKADEMY_FIELDS || []).filter(
+    (f) => f.match,
   );
+
   const lessonMap = window.SHACKADEMY_LESSONS || {};
   const sectionMap = window.SHACKADEMY_SECTIONS || {};
+
+  // Sections identified by URL route (no edit form), e.g. Insights.
+  // Longest route first so "insights/monte-carlo" beats "insights".
+  const routeSections = Object.entries(sectionMap)
+    .flatMap(([key, config]) =>
+      [].concat(config.route || []).map((route) => ({ key, route })),
+    )
+    .sort((a, b) => b.route.length - a.route.length);
+
+  function resolveField(key) {
+    const entries = fieldMap.get(key);
+    if (!entries) return null;
+    return (
+      entries.find(
+        (f) =>
+          Array.isArray(f.sections) && f.sections.includes(currentSectionKey),
+      ) ||
+      entries.find((f) => !Array.isArray(f.sections)) ||
+      null
+    );
+  }
 
   // ---------------------------------------------------------------------------
   // State
@@ -47,6 +83,7 @@
   let currentTabKey = null;
   let currentItemId = null;
   let userOpenedEmptyPanel = false;
+  let lastNudgedSectionKey = null; // pulse the S tab once per new section
   const visibleFields = new Map(); // key -> { field, el }
 
   // ---------------------------------------------------------------------------
@@ -180,9 +217,46 @@
     return match ? match.key : null;
   }
 
+  // The visible text of a label, without Voyant's hidden "More information
+  // about" spans, our own badge, or a required-field asterisk.
+  function getLabelText(labelEl) {
+    const firstSpan = labelEl.querySelector("span:not(.visually-hidden)");
+    const raw = firstSpan
+      ? firstSpan.textContent
+      : (labelEl.innerText || "").split("\n")[0];
+    return raw.replace(/\*/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  // The heading of the collapsible box a label sits in, e.g. "Product Fees".
+  function getLabelGroup(labelEl) {
+    const box = labelEl.closest(".collapsible-form-container");
+    if (!box) return null;
+    return (box.innerText || "").trim().split("\n")[0].trim();
+  }
+
+  function getTextMatchedKey(labelEl) {
+    if (!textMatchedFields.length || !currentSectionKey) return null;
+    const tab = currentTabKey || "basics";
+    const text = getLabelText(labelEl);
+    let group;
+    const hit = textMatchedFields.find((f) => {
+      const m = f.match;
+      if (m.section !== currentSectionKey || m.tab !== tab) return false;
+      if (m.text !== text) return false;
+      if (m.group) {
+        if (group === undefined) group = getLabelGroup(labelEl);
+        if (m.group !== group) return false;
+      }
+      return true;
+    });
+    return hit ? hit.key : null;
+  }
+
   function getTargetKey(el) {
     if (el.tagName === "LABEL") {
-      return getLabelKey(el);
+      const key = getLabelKey(el);
+      if (key && fieldMap.has(key)) return key;
+      return getTextMatchedKey(el) || key;
     }
     if (el.getAttribute("role") === "columnheader") {
       return getColumnHeaderKey(el);
@@ -249,18 +323,50 @@
   }
 
   // Extract segments from Voyant's hash URL
-  // Hash format: #/userId/planId/edit/itemId/tab
-  // Year View has its own shorter route: #/userId/planId/year-view
+  // Edit forms:    #/userId/planId/edit/itemId/tab
+  // Other screens: #/userId/planId/<route>, e.g. year-view, insights/monte-carlo
+  // Query strings (e.g. ?selectedYear=2027) are ignored.
   function parseHash() {
-    const parts = window.location.hash.split("/");
-    if (parts[3] === "year-view") {
-      return { itemId: null, tab: null, isYearView: true };
+    const parts = window.location.hash.split("?")[0].split("/");
+    const routePath = parts.slice(3).join("/");
+    if (parts[3] === "edit") {
+      return {
+        itemId: parts.length >= 5 ? parts[4] : null,
+        tab: parts.length >= 6 ? parts[5].toLowerCase() : null,
+        routePath,
+        isEdit: true,
+      };
     }
-    return {
-      itemId: parts.length >= 5 ? parts[4] : null,
-      tab: parts.length >= 6 ? parts[5].toLowerCase() : null,
-      isYearView: false,
-    };
+    return { itemId: null, tab: null, routePath, isEdit: false };
+  }
+
+  function findRouteSection(routePath) {
+    if (!routePath) return null;
+    // Year View opened from inside an insight (e.g. insights/market-crash/
+    // year-view) gets the Year View guide, not the insight's.
+    if (routePath.split("/").includes("year-view")) {
+      const yv = routeSections.find(({ route }) => route === "year-view");
+      if (yv) return yv.key;
+    }
+    const hit = routeSections.find(
+      ({ route }) => routePath === route || routePath.startsWith(route + "/"),
+    );
+    return hit ? hit.key : null;
+  }
+
+  // Year View's tabs (Cash Flow, Taxes...) don't change the URL. The selected
+  // one is the button[data-test-tab] with the "selected" class.
+  function getYearViewTabKey() {
+    const btn = document.querySelector("button[data-test-tab].selected");
+    const key = btn?.getAttribute("data-test-tab");
+    return key ? key.toLowerCase() : null;
+  }
+
+  function getRouteTabKey(sectionKey) {
+    if (sectionMap[sectionKey]?.tabSource === "yearView") {
+      return getYearViewTabKey();
+    }
+    return null;
   }
 
   // ---------------------------------------------------------------------------
@@ -268,14 +374,19 @@
   // ---------------------------------------------------------------------------
 
   function detectPageContext() {
-    const { itemId: newItemId, tab: newTab, isYearView } = parseHash();
+    const { itemId: newItemId, tab: newTab, routePath, isEdit } = parseHash();
 
-    if (isYearView) {
-      currentItemId = null;
-      currentTabKey = null;
-      currentSectionKey = "yearView";
-      updateContextPanel();
-      return;
+    // Screens without an edit form are matched by route first.
+    if (!isEdit) {
+      const routeSection = findRouteSection(routePath);
+      if (routeSection) {
+        currentItemId = null;
+        currentSectionKey = routeSection;
+        currentTabKey = getRouteTabKey(routeSection);
+        updateContextPanel();
+        updateHeadingButton();
+        return;
+      }
     }
 
     // Tab changed within same item - update tab key and re-render, keep section
@@ -339,28 +450,37 @@
   // Field enhancement
   // ---------------------------------------------------------------------------
 
+  // A target only counts if a tooltip applies to it in the current section,
+  // so section-scoped entries never show a badge elsewhere.
+  function hasFieldFor(el) {
+    const key = getTargetKey(el);
+    return !!(key && resolveField(key));
+  }
+
   function findTargets() {
     const labels = Array.from(document.querySelectorAll("label")).filter(
-      (el) => {
-        const key = getTargetKey(el);
-        return key && fieldMap.has(key);
-      },
+      (el) => !el.closest(`#${PANEL_ID}`) && hasFieldFor(el),
     );
     const columnHeaders = Array.from(
       document.querySelectorAll('div[role="columnheader"]'),
-    ).filter((el) => {
-      const key = getTargetKey(el);
-      return key && fieldMap.has(key);
-    });
+    ).filter(hasFieldFor);
     return [...labels, ...columnHeaders];
+  }
+
+  // Resolve the tooltip when it's opened, not when the badge is added, so a
+  // shared field ID shows the entry for the section the user is in now.
+  function fieldForTarget(targetEl) {
+    const key = targetEl.getAttribute(KEY_ATTR) || getTargetKey(targetEl);
+    return resolveField(key);
   }
 
   function enhanceTarget(targetEl) {
     if (targetEl.getAttribute(ENHANCED_ATTR) === "true") return;
 
     const key = getTargetKey(targetEl);
-    const field = fieldMap.get(key);
+    const field = resolveField(key);
     if (!field) return;
+    targetEl.setAttribute(KEY_ATTR, key);
 
     targetEl.setAttribute(ENHANCED_ATTR, "true");
     targetEl.classList.add("shackademy-enhanced");
@@ -388,13 +508,15 @@
     targetEl.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      openModal(field);
+      const current = fieldForTarget(targetEl);
+      if (current) openModal(current);
     });
 
     targetEl.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        openModal(field);
+        const current = fieldForTarget(targetEl);
+        if (current) openModal(current);
       }
     });
 
@@ -402,13 +524,102 @@
     return true;
   }
 
+  // Year View tabs change without a URL change, so check on every pass.
+  function refreshRouteTab() {
+    const section = currentSectionKey ? sectionMap[currentSectionKey] : null;
+    if (!section || section.tabSource !== "yearView") return;
+    const tabKey = getYearViewTabKey();
+    if (tabKey && tabKey !== currentTabKey) {
+      currentTabKey = tabKey;
+      updateContextPanel();
+    }
+  }
+
   function runEnhancement() {
     const anyNew = findTargets().map(enhanceTarget).some(Boolean);
     updateYearLabels();
+    refreshRouteTab();
+    updateHeadingButton();
     if (anyNew) {
       updateFieldsPanel();
       updateContextPanel();
       nudgeToggle();
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Guide button on screen headings (e.g. each insight)
+  // ---------------------------------------------------------------------------
+
+  function getHeadingEl() {
+    return Array.from(document.querySelectorAll("h1")).find(
+      (h) => h.offsetParent !== null && !h.closest(`#${PANEL_ID}`),
+    );
+  }
+
+  function updateHeadingButton() {
+    const section = currentSectionKey ? sectionMap[currentSectionKey] : null;
+    const existing = document.querySelectorAll(`.${GUIDE_BTN_CLASS}`);
+
+    if (!section?.headingButton) {
+      existing.forEach((b) => b.remove());
+      return;
+    }
+
+    const heading = getHeadingEl();
+    if (!heading) return;
+    // Remove any button left on a heading that's no longer the current one.
+    existing.forEach((b) => {
+      if (!heading.contains(b)) b.remove();
+    });
+    if (heading.querySelector(`.${GUIDE_BTN_CLASS}`)) return;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = GUIDE_BTN_CLASS;
+    btn.setAttribute("aria-label", "Open the Shackademy guide for this screen");
+    btn.innerHTML = `<span class="shackademy-guide-btn-mark" aria-hidden="true">S</span><span>Guide</span>`;
+    // Only this button responds, so Voyant's own help on the heading still works.
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openGuide();
+    });
+    heading.appendChild(btn);
+  }
+
+  // Opens the side panel on the Guide view and briefly highlights the guide.
+  function openGuide() {
+    const panel = document.getElementById(PANEL_ID);
+    if (!panel) return;
+
+    userClosedPanel = false;
+    if (panel.classList.contains("hidden")) {
+      userOpenedEmptyPanel = true;
+      panel.classList.remove("hidden");
+      applyPinned();
+      showDisclaimerFooter();
+    }
+
+    panel
+      .querySelectorAll(".shackademy-panel-nav-btn")
+      .forEach((b) => b.classList.toggle("active", b.dataset.view === "guide"));
+    panel
+      .querySelectorAll(".shackademy-panel-view")
+      .forEach((v) => v.classList.toggle("active", v.dataset.view === "guide"));
+
+    updateContextPanel();
+
+    const guide = document.getElementById("shackademy-guide-content");
+    if (guide) {
+      guide.classList.remove("shackademy-flash");
+      void guide.offsetWidth; // restart the animation
+      guide.classList.add("shackademy-flash");
+      guide.addEventListener(
+        "animationend",
+        () => guide.classList.remove("shackademy-flash"),
+        { once: true },
+      );
     }
   }
 
@@ -655,19 +866,30 @@
     const section = currentSectionKey ? sectionMap[currentSectionKey] : null;
 
     if (!section) {
+      lastNudgedSectionKey = null;
       container.innerHTML = `
         <p class="shackademy-panel-empty">
           Navigate to a Voyant section to see guidance and lessons here.
         </p>`;
       return;
     }
+    // Pulse the S tab when a new section with guide text is detected, so
+    // screens without field tooltips (e.g. Insights) still draw attention.
+    if (currentSectionKey !== lastNudgedSectionKey) {
+      lastNudgedSectionKey = currentSectionKey;
+      nudgeToggle();
+    }
+
     // Build tab title - use TAB_LABELS lookup, fall back to capitalised key
     const tabKey = currentTabKey || "basics";
     const tabConfig = section.tabs?.[tabKey] || section.tabs?.["basics"];
     const labelMap = window.TAB_LABELS || {};
     const tabLabel =
       labelMap[tabKey] || tabKey.charAt(0).toUpperCase() + tabKey.slice(1);
-    const title = `${section.name} - ${tabLabel}`;
+    // Single-screen sections (e.g. each insight) show just their name.
+    const title = section.titleOnly
+      ? section.name
+      : `${section.name} - ${tabLabel}`;
 
     // Section title header
     const titleEl = document.createElement("div");
@@ -796,8 +1018,18 @@
       el.removeAttribute("tabindex");
       el.removeAttribute("aria-haspopup");
       el.removeAttribute("aria-label");
+      el.removeAttribute(KEY_ATTR);
       el.querySelector(`.${BADGE_CLASS}`)?.remove();
     });
+    document.querySelectorAll(`.${GUIDE_BTN_CLASS}`).forEach((b) => b.remove());
+
+    // Stop watching the page, so nothing is re-added after switching off.
+    window.__shackademyObserver?.disconnect();
+    window.__shackademyObserver = null;
+    if (window.__shackademyHashHandler) {
+      window.removeEventListener("hashchange", window.__shackademyHashHandler);
+      window.__shackademyHashHandler = null;
+    }
 
     visibleFields.clear();
     currentSectionKey = null;
@@ -839,16 +1071,21 @@
     window.__shackademyObserver = observer;
 
     // Re-detect context and check for fields on every hash change
-    window.addEventListener("hashchange", () => {
+    const onHashChange = () => {
       userOpenedEmptyPanel = false;
       detectPageContext();
 
       setTimeout(() => {
         visibleFields.clear();
 
+        // Labels rendered before the section was known (e.g. a scoped
+        // insight field, or Plan Settings fee labels matched by text) can
+        // only be badged now.
+        findTargets().forEach(enhanceTarget);
+
         findTargets().forEach((labelEl) => {
           const key = getTargetKey(labelEl);
-          const field = fieldMap.get(key);
+          const field = resolveField(key);
 
           if (field) {
             visibleFields.set(key, { field, el: labelEl });
@@ -857,8 +1094,11 @@
 
         updateFieldsPanel();
         updateContextPanel();
+        updateHeadingButton();
       }, 400);
-    });
+    };
+    window.addEventListener("hashchange", onHashChange);
+    window.__shackademyHashHandler = onHashChange;
 
     // Watch for Voyant's Done/Cancel buttons to clear section context
     document.body.addEventListener(
@@ -867,7 +1107,10 @@
         const btn = e.target.closest(
           'button[data-test-model-save="true"], button[aria-label="Done"], button[data-test-model-cancel="true"], button[aria-label="Cancel"]',
         );
-        if (btn) {
+        // Only edit forms clear the context. Pop-ups on other screens (e.g.
+        // the Accounts Using Asset Allocation window on an insight) have
+        // their own Done/Cancel buttons, and the screen's guide should stay.
+        if (btn && parseHash().isEdit) {
           currentSectionKey = null;
           currentItemId = null;
           currentTabKey = null;

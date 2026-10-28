@@ -129,4 +129,24 @@ window.SHACKADEMY_LESSONS = {
     title: "Voyant Help - Distributing assets to specified beneficiaries",
     url: "https://support.planwithvoyant.com/hc/en-us/articles/49503230436635-Estate-Plans-How-to-distribute-specified-assets-to-specified-beneficiaries-UK",
   },
+
+  insights: {
+    title: "Insights",
+    url: "https://shackademy.com/path-player?courseid=voyant&unit=6773233834b58d2bf70b02b9Unit",
+  },
+
+  "monte-carlo": {
+    title: "Monte Carlo Analysis",
+    url: "https://shackademy.com/path-player?courseid=voyant&unit=682278e3c4a4845c9901e2c4Unit",
+  },
+
+  "what-if": {
+    title: "What-if Scenarios",
+    url: "https://shackademy.com/path-player?courseid=voyant&unit=67562126bb11d632650d471aUnit",
+  },
+
+  "lets-see": {
+    title: "The Let's See Charts",
+    url: "https://shackademy.com/path-player?courseid=voyant&unit=677323348b79bde0330c42e9Unit",
+  },
 };

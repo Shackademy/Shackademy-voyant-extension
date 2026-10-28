@@ -7,9 +7,18 @@
 //   name          - display name, used to auto-build tab titles
 //   typeIndicator - label for/id that identifies this section in the DOM
 //                   (only present on the Basics tab - context persists via URL)
+//   route         - for screens without an edit form, the URL route after the
+//                   plan ID, e.g. "insights/monte-carlo" or "year-view". The
+//                   longest matching route wins. Query strings are ignored.
+//   tabSource     - "yearView" if the section's tabs come from Year View's
+//                   own tab buttons rather than the URL
+//   titleOnly     - true to show just the name as the panel title, with no
+//                   " - Tab" suffix (for single-screen sections)
+//   headingButton - true to add a Shackademy Guide button to the screen's
+//                   heading, which opens this guide in the side panel
 //   lessons       - array of lesson keys from lessons.js (shown for whole section)
-//   tabs          - one entry per tab, keyed by Voyant's URL hash segment
-//                   e.g. "basics", "timing", "growth", "contribution", "steps"
+//   tabs          - one entry per tab, keyed by Voyant's URL hash segment in
+//                   lower case, e.g. "basics", "timing", "payment-sources"
 //
 // Tab titles are built automatically as: "{name} - {Tab}"
 // You only need to write 'name' once.
@@ -19,14 +28,8 @@
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-// Reusable tab descriptions
-// Used wherever a tab's description is consistent across sections.
-// Override inline in a specific section's tabs entry if needed.
-// -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
 // Tab display name overrides
-// Maps URL hash segments to human-readable tab names.
+// Maps URL hash segments (lower case) to human-readable tab names.
 // Any segment not listed here will be capitalised automatically.
 // -----------------------------------------------------------------------------
 
@@ -64,7 +67,22 @@ window.TAB_LABELS = {
   majorloss: "Major Loss",
   savings: "Savings Order",
   calcs: "Calculation Settings",
+  // Year View tabs (from Voyant's data-test-tab buttons)
+  cashflow: "Cash Flow",
+  expenses: "Expenses",
+  investments: "Investments",
+  retirements: "Pensions",
+  properties: "Property",
+  debts: "Debt",
+  insurances: "Protection",
+  taxdetails: "Taxes",
 };
+
+// -----------------------------------------------------------------------------
+// Reusable tab descriptions
+// Used wherever a tab's description is consistent across sections.
+// Override inline in a specific section's tabs entry if needed.
+// -----------------------------------------------------------------------------
 
 window.TAB_DESCRIPTIONS = {
   timing: `
@@ -74,24 +92,31 @@ window.TAB_DESCRIPTIONS = {
 
   growth: `
     <p>The Growth tab sets the <strong>assumed annual rate of return</strong> for this item. Voyant uses this to project its future value over time.</p>
-    <p>If left unchanged, Voyant uses the default growth assumption from Plan Settings. You can override it here for this specific item.</p>
-    <p>Please note, once a plan is created this is the only place to update growth assumptions - the Plan Settings will only impact <strong>new</strong> plans created.</p>
-    <p>Consider using a cautious assumption as your base case, and model a more optimistic scenario using a What If scenario to understand the range of possible outcomes.</p>
-    <p>Our suggestion is to leave this on the default Entered Growth Rate until you're comfortable with Voyant.</p>
+    <p>If this item is on the default, changing the rate in Plan Settings changes it here too. Once you enter your own figure here, the item keeps it, even if you later enter the same figure as the default.</p>
+    <p>Shackademy's suggested approach is to use Entered Growth Rate, and to choose a rate you think is realistic for this account. A projection is only as reliable as the growth rates behind it, so you can test higher and lower rates in a What If.</p>
+    <ul>
+      <li>Any fees on the account's Fees tab are taken in addition to this growth rate. If the rate you're using already allows for fees, entering them on the Fees tab as well counts them twice.</li>
+      <li>If you switch to Portfolio/Holdings, the allocation starts at 100% cash, and the dataset's expected returns can be much higher than an entered rate.</li>
+    </ul>
   `,
 
   steps: `
     <p>Steps allow you to model <strong>changes to this item at a future point in time</strong></p>
     <p>Each step is triggered by a timeline event. You can add as many steps as needed to reflect how this item is expected to change throughout the plan.</p>
+    <ul>
+      <li>A Step can't be placed in the plan's first year.</li>
+      <li>On an account, a Step changes an existing contribution, so first set a contribution and its Contributions Start and End events on the account's <strong>Timing</strong> tab.</li>
+    </ul>
   `,
 
   fees: `
     <p>The Fees tab lets you model <strong>product fees and advice fees</strong> associated with this account.</p>
     <ul>
       <li><strong>Product fee</strong> - deducted from the gross growth rate.</li>
-      <li><strong>Ongoing advice fee</strong> - modelled as a withdrawal from the account. Will generate a tax event where applicable (e.g. Capital Gains Tax for unwrapped investments).</li>
+      <li><strong>Ongoing advice fee</strong> - taken out of the account as a withdrawal, so it shows in the account's Withdrawals in Year View rather than in Net Growth.</li>
     </ul>
-    <p>Ensure the entered growth rate factors in any account fees. For example, if using the default growth rate of 5% you may want to gross this up to offset the fee reduction.</p>
+    <p>The Product Fee and Ongoing Advice Fee show the default from Plan Settings > Fees. Click Edit to enter your own figure for this account. Once edited, the account keeps its own figure, even if you click Use Defaults, so later changes in Plan Settings won't reach it.</p>
+    <p>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</p>
   `,
 
   transfers: `
@@ -101,6 +126,7 @@ window.TAB_DESCRIPTIONS = {
       <li>Both the source and destination accounts must already exist in the plan before setting up a transfer</li>
       <li>Transfers are linked to timeline events so you can model them at a specific future date</li>
       <li>Transfers can also be used to invest surplus income by selecting 'All Surplus' as the 'Transfer From' account</li>
+      <li>Money can go into a pension by a Transfer from All Surplus, or from an account such as a GIA or ISA. A Default Surplus Account (your cash) can't be the source of a transfer into a pension: pensions aren't offered as a destination when cash is the source.</li>
       <li>Check Year View after saving to confirm the source and destination balances move as expected</li>
     </ul>
   `,
@@ -117,11 +143,26 @@ window.TAB_DESCRIPTIONS = {
     <p>Use Planned Withdrawals when you want to model a deliberate strategy - for example, drawing a fixed annual income from a drawdown pension, or systematically running down an investment account over a set period.</p>
     <ul>
       <li>The 'Selected Account' will default to the plan you were in when you chose to add a planned withdrawal</li>
-      <li>For pension planned withdrawals, the Pension Strategy field on the pension entry determines whether withdrawals are UFPLS or Flexible Access Drawdown</li>
+      <li>For a pension, the Pension Strategy field on the Planned Withdrawal itself (it appears when a pension is selected) sets whether the withdrawal is UFPLS or Flexible Access Drawdown</li>
       <li>Check Year View > Cash Flow to confirm the withdrawal is appearing correctly</li>
     </ul>
   `,
 };
+
+// -----------------------------------------------------------------------------
+// Shared text
+// -----------------------------------------------------------------------------
+
+const PAYMENT_SOURCES_PREFERRED_NOTE = `
+  <li>With 'Only Use Preferred Payment Sources' ticked, Voyant only uses your preferred sources. If they can't cover the whole amount, it uses what they have, and the rest shows as Unfulfilled in Year View > Expenses.</li>
+`;
+
+const YEAR_VIEW_NAVIGATION = `
+  <p><strong>Moving between years:</strong> use the arrow keys, the floating arrows either side of the screen, the slider under the chart, or the year selector at the top right.</p>
+  <p><strong>Real Money:</strong> to see these figures in today's money, go to the Dashboard, select the three vertical dots in the top right corner (next to 'Year View') and select 'Real Money' - you can't make this change in Year View itself. In Real Money, goals can show slightly below the amount you entered, even in the first year. Voyant treats each year's figures as happening at the end of the year, so even the first year's figures are reduced by a year's inflation when they're turned back into today's money.</p>
+`;
+
+const INSIGHT_LESSONS = ["insights"];
 
 // -----------------------------------------------------------------------------
 // Sections
@@ -141,15 +182,19 @@ window.SHACKADEMY_SECTIONS = {
         description: `
           <p>This is where you set up the <strong>people in your financial plan</strong>. Every plan needs at least one person - the plan owner - and you can add a partner or spouse as a second person.</p>
           <p>Getting the basics right here is important as Voyant uses this information - particularly date of birth and retirement age - throughout all projections.</p>
-          <p>Information such as tax allowances, State Pension timing and pension access ages may be modelled using these details.</p>
+          <p>Date of birth drives every age-based event, including State Pension timing. Voyant doesn't apply a minimum pension age automatically. Instead, each pension's Withdrawal Limit tab controls when it can be accessed. This means you can set the right age for each pension, for example if one has a protected pension age.</p>
           <p>If you are planning for yourself, you are the plan owner. Add your partner as a second person if you want to model your finances jointly.</p>
+          <ul>
+            <li>Adding a partner or child also creates their own Default Surplus Account (cash) and events on the Timeline. Check each person's Mortality event there, because the base plan's primary person and a partner added later can have different defaults.</li>
+            <li>For a birthday between 1 January and 5 April, the age Voyant shows for a plan year is one less than the age you'll reach during that tax year. Check events by their year on the Timeline.</li>
+          </ul>
         `,
       },
     },
   },
 
   // ============================================================
-  // Pre-Retirenment & Retirement Goals
+  // Pre-Retirement & Retirement Goals
   // ============================================================
 
   goals: {
@@ -165,12 +210,14 @@ window.SHACKADEMY_SECTIONS = {
           <ul>
             <li>Use a name that's meaningful to you - it will appear on the timeline and in reports</li>
             <li>Check Year View > Expenses after saving to confirm the goal is appearing correctly</li>
+            <li>Each goal has a priority, set with the slider (the highest is on the left, and new goals start there). If there isn't enough money, lower-priority goals are cut first. Year View > Expenses shows each goal's priority in the Category column.</li>
+            <li>Some costs are already included elsewhere in your plan: contributions are set on each savings, investment or pension account, insurance premiums on each policy, and debt repayments on each debt. Check your spending goals don't include these as well, or they'll be counted twice.</li>
           </ul>
         `,
       },
       "expense-details": {
         description: `
-          <p>The Details tab allows you to set a <strong>more specific expense amount or structure</strong> for this goal - including itemising the expediture or making it a % of your income.</p>
+          <p>The Details tab allows you to set a <strong>more specific expense amount or structure</strong> for this goal - including itemising the expenditure or making it a % of your income.</p>
           <p>Anything entered here will override what you entered in the Basics tab, so only use this tab if you need more precise control than the Basics tab allows.</p>
         `,
       },
@@ -184,11 +231,12 @@ window.SHACKADEMY_SECTIONS = {
           </ul>
         `,
       },
-      "payment sources": {
+      "payment-sources": {
         description: `
           <p>The Payment Sources tab lets you specify <strong>which account or asset Voyant should use to pay for this goal</strong>. By default, Voyant will use whatever is available according to the liquidation order specified in plan settings.</p>
           <p>Use this tab if you want a specific account to fund a specific goal - for example, using a dedicated savings account for school fees.</p>
           <p>Use the "Only Use Preferred Sources" option very sparingly as it can create artificial shortfalls if the nominated account is insufficient.</p>
+          <ul>${PAYMENT_SOURCES_PREFERRED_NOTE}</ul>
         `,
       },
       steps: {
@@ -222,15 +270,17 @@ window.SHACKADEMY_SECTIONS = {
           <p>The Timing tab controls <strong>when this goal occurs</strong> in your plan.</p>
           <p>Goals are linked to timeline events - so if a related event date changes, this goal will move automatically.</p>
           <ul>
+            <li>The event defaults to the primary person's retirement. Change it to the event the goal belongs to.</li>
             <li>Check the Shackademy lesson for a step-by-step walkthrough</li>
           </ul>
         `,
       },
-      "payment sources": {
+      "payment-sources": {
         description: `
           <p>The Payment Sources tab lets you specify <strong>which account or asset Voyant should use to pay for this goal</strong>. By default, Voyant will use whatever is available according to the liquidation order specified in plan settings.</p>
           <p>Use this tab if you want a specific account to fund this goal - for example, using a dedicated savings account.</p>
           <p>Use the "Only Use Preferred Sources" option very sparingly as it can create artificial shortfalls if the nominated account is insufficient.</p>
+          <ul>${PAYMENT_SOURCES_PREFERRED_NOTE}</ul>
         `,
       },
     },
@@ -291,11 +341,12 @@ window.SHACKADEMY_SECTIONS = {
           </ul>
         `,
       },
-      "payment sources": {
+      "payment-sources": {
         description: `
           <p>The Payment Sources tab lets you specify <strong>which account or asset Voyant should use to pay for this goal</strong>. By default, Voyant will use whatever is available according to the liquidation order specified in plan settings.</p>
           <p>Use this tab if you want a specific account to fund this goal - for example, a dedicated savings account for school fees.</p>
           <p>Use the "Only Use Preferred Sources" option very sparingly as it can create artificial shortfalls if the nominated account is insufficient.</p>
+          <ul>${PAYMENT_SOURCES_PREFERRED_NOTE}</ul>
         `,
       },
       steps: {
@@ -320,6 +371,7 @@ window.SHACKADEMY_SECTIONS = {
           <p>We suggest using <strong>Goals rather than Expenses</strong> in Voyant as that then means you can easily track the progress on the Dashboard and Timeline tabs</p>
           <ul>
             <li>Choose a Recipient Type first - this determines whether you select an existing person in the plan, or enter a name for someone outside the plan or a charity</li>
+            <li>Person in plan only appears once the plan has a child, grandchild, parent or other person. Your spouse or partner isn't offered.</li>
             <li>Use a name that's meaningful to you - it will appear on the timeline and in reports</li>
             <li>Check Year View > Expenses after saving to confirm the goal is appearing correctly</li>
           </ul>
@@ -330,16 +382,18 @@ window.SHACKADEMY_SECTIONS = {
           <p>The Timing tab controls <strong>when this gift starts and ends</strong> in your plan, and how frequently it occurs.</p>
           <p>Goals are linked to timeline events - so if your retirement date changes, any goals tied to it will move automatically.</p>
           <ul>
+            <li>The timing defaults to running from Plan Start to the last death, so a gift left on the default is paid every year. For a one-off gift, use the same start and end event.</li>
             <li>Use the Expense Frequency field to model less-than-annual gifts</li>
             <li>Check the Shackademy lesson for a step-by-step walkthrough</li>
           </ul>
         `,
       },
-      "payment sources": {
+      "payment-sources": {
         description: `
           <p>The Payment Sources tab lets you specify <strong>which account or asset Voyant should use to fund this gift</strong>. By default, Voyant will use whatever is available according to the liquidation order specified in plan settings.</p>
           <p>Use this tab if you want a specific account to fund this gift - for example, a dedicated savings account.</p>
           <p>Use the "Only Use Preferred Sources" option very sparingly as it can create artificial shortfalls if the nominated account is insufficient.</p>
+          <ul>${PAYMENT_SOURCES_PREFERRED_NOTE}</ul>
         `,
       },
       steps: {
@@ -360,10 +414,20 @@ window.SHACKADEMY_SECTIONS = {
       basics: {
         description: `
           <p>Events are <strong>milestones on your timeline</strong> - named points in time that Voyant uses to trigger changes in your plan. Retirement, buying a property, children leaving home, or starting a business are all examples of events.</p>
-          <p>Rather than working with fixed calendar dates, Voyant links items in your plan to events. This means if you change when an event happens, everything connected to it updates automatically - making it much easier to model scenarios like "what if I retire two years earlier?"</p>
+          <p>Rather than working with fixed calendar dates, Voyant links items in your plan to events. If you change when an event happens, everything connected to it moves too, so check what an event is linked to before moving it.</p>
+          <p>We suggest only linking items to the same event if they should always move together, and giving things like a property sale, a DB pension start, withdrawals, contribution changes and gifts their own events. That way, changing one doesn't move the others.</p>
           <ul>
             <li>Use descriptive names - "Jane Retires" is much clearer than "Event 1"</li>
             <li>Events can be positioned by year or by the owner's age - both update each other automatically</li>
+            <li>If the event is linked to anything, the top of the form says "This event affects the timing of ... items". Click <strong>Show Details</strong> to see how many of each type, then click a type (for example Income) to see each item's name and its start and end.</li>
+            <li>An event linked to other items can't be deleted. First remove it from the timing of each item listed, then delete it. Some events, such as Retirement, can't be deleted at all.</li>
+            <li>Changing this event's year or age moves everything linked to it.</li>
+          </ul>
+          <p><strong>Special events:</strong></p>
+          <ul>
+            <li><strong>Disability</strong> - stops that person's salary and pension contributions from that year. Without a Disability End event, the salary doesn't come back. There can only be one Disability event per person. Income protection only pays during it.</li>
+            <li><strong>Critical illness</strong> - pays any critical illness cover, but doesn't stop salary. To model time off work, add a Disability event too.</li>
+            <li><strong>Mortality</strong> - can't be set before that person's retirement age. To look at an early death, use Overview > Legacy or the Life Needs insight.</li>
           </ul>
         `,
       },
@@ -413,7 +477,7 @@ window.SHACKADEMY_SECTIONS = {
 
   "other-income": {
     name: "Other Income",
-    typeIndicator: "otherIncomeInputTaxationType",
+    typeIndicator: "otherIncomeTaxationType",
     lessons: ["income-expenses"],
     tabs: {
       basics: {
@@ -423,7 +487,12 @@ window.SHACKADEMY_SECTIONS = {
           <p>Use the Taxation Type field to tell Voyant how to tax this income - as income, property income, capital gains, or dividends.</p>
         `,
       },
-      timing: { description: window.TAB_DESCRIPTIONS.timing },
+      timing: {
+        description: `
+          <p>The Timing tab controls <strong>when this income starts and ends</strong> in your plan.</p>
+          <p>Check the start and end events on this tab. The defaults may not match when this income actually starts and stops, for example if it carries on into retirement.</p>
+        `,
+      },
       steps: { description: window.TAB_DESCRIPTIONS.steps },
     },
   },
@@ -444,6 +513,8 @@ window.SHACKADEMY_SECTIONS = {
           <ul>
             <li>Use the Timing tab to set when the windfall is received.</li>
             <li>For inheritances, enter the net amount expected after any inheritance tax, estate liabilities, funeral costs, and any other deductions have been settled from the estate.</li>
+            <li>The whole amount is paid into your Default Surplus Account (cash) at the end of that year, and stays there unless a Transfer or Sweep moves it.</li>
+            <li>A windfall in the plan's first year drops out at the next plan-year update.</li>
           </ul>
         `,
       },
@@ -482,6 +553,7 @@ window.SHACKADEMY_SECTIONS = {
           <p>The Timing tab controls <strong>when contributions are allowed</strong> in this plan. Voyant uses timeline events - milestones you define, like Retirement or a specific age - rather than fixed calendar dates, so your plan stays dynamic as assumptions change.</p>
           <ul>
             <li>It is imperative that this is set if you want the account to be able to receive contributions.</li>
+            <li>Contributions need both a Contributions Start and a Contributions End event, set on this <strong>Timing</strong> tab. Without both, none are made.</li>
             <li>As a baseline, you can set the start to 'Plan Start' and end to 'Plan End' to allow contributions throughout.</li>
           </ul>
         `,
@@ -517,7 +589,7 @@ window.SHACKADEMY_SECTIONS = {
           <ul>
             <li><strong>Stocks & Shares ISA / Lifetime ISA</strong> - tax-free growth and withdrawals</li>
             <li><strong>Unwrapped investments</strong> - subject to Capital Gains Tax on gains</li>
-            <li><strong>Onshore/Offshore bonds</strong> - tax-deferred; 5% tax deferred annual withdrawal allowance based on the original investment amount for each policy year</li>
+            <li><strong>Onshore/Offshore bonds</strong> - tax-deferred. Voyant applies the bond withdrawal allowance; see Year View > Taxes</li>
             <li><strong>Trusts, EIS, SEIS, VCTs</strong> - not accessed automatically; require planned withdrawals</li>
           </ul>
           <p>For investment bonds, make sure you enter the Purchase Value and Year Purchased accurately as these affect Voyant's tax calculations.</p>
@@ -529,6 +601,8 @@ window.SHACKADEMY_SECTIONS = {
           <p>The Timing tab controls <strong>when contributions are allowed</strong> in this plan. Voyant uses timeline events - milestones you define, like Retirement or a specific age - rather than fixed calendar dates, so your plan stays dynamic as assumptions change.</p>
           <ul>
             <li>It is imperative that this is set if you want the account to be able to receive contributions.</li>
+            <li>Contributions need both a Contributions Start and a Contributions End event, set on this <strong>Timing</strong> tab. Without both, none are made.</li>
+            <li>Onshore and offshore bonds also need a Bond Start and a Bond End event.</li>
             <li>As a baseline, you can set the start to 'Plan Start' and end to 'Plan End' to allow contributions throughout.</li>
           </ul>
         `,
@@ -557,7 +631,7 @@ window.SHACKADEMY_SECTIONS = {
           <p>This is where you enter <strong>property and other physical assets</strong> - your main home, buy-to-let properties, holiday homes, vehicles, collectables, or business property. Enter the current market value.</p>
           <p>The Asset Type field is important for tax. Voyant assesses this as follows:</p>
           <ul>
-            <li><strong>Main Residence</strong> - exempt from Capital Gains Tax on sale (if toggled on)</li>
+            <li><strong>Main Residence</strong> - treated as your home, so no Capital Gains Tax is charged on sale</li>
             <li><strong>All other property</strong> - gains on sale are subject to CGT</li>
           </ul>
           <p>If the property has not yet been purchased, toggle <em>Is this a Future Purchase?</em> to Yes and use the Timing tab to set the buy and sell events.</p>
@@ -571,6 +645,9 @@ window.SHACKADEMY_SECTIONS = {
           <p>If you are modelling a property that is already owned and not being sold within the plan, leave the Buy Event as 'Plan Start' and the Sell Event as 'Plan End'.</p>
           <p>If you are modelling a future purchase or a planned sale - such as downsizing in retirement - set both events carefully. Voyant will model the purchase cost as an expense and any sale proceeds as an inflow, with CGT applied where applicable.</p>
           <p>Check out the linked lesson to understand how to include Stamp Duty Land Tax.</p>
+          <ul>
+            <li>Sale proceeds first pay that year's spending. The rest goes into cash, split by ownership share, and any Capital Gains Tax shows the following year. A linked mortgage is repaid from the sale. Check Year View &gt; Cash Flow and Property in the year of sale.</li>
+          </ul>
         `,
       },
       steps: { description: window.TAB_DESCRIPTIONS.steps },
@@ -581,6 +658,7 @@ window.SHACKADEMY_SECTIONS = {
           <ul>
             <li>Use cautiously, as restricting payment sources can create artificial shortfalls</li>
             <li>Check Year View after saving to make sure payments are being funded as intended</li>
+            <li>In testing on a property purchase, with 'Only Use Preferred Payment Sources' ticked, nothing was paid if the preferred sources couldn't cover the whole price, and the full cost showed as Unfulfilled in Year View &gt; Expenses.</li>
           </ul>
         `,
       },
@@ -600,6 +678,9 @@ window.SHACKADEMY_SECTIONS = {
         description: `
           <p>The Linked Income tab lets you link existing income or add new ones e.g. rental income.</p>
           <p>If the property is sold (Timing tab) then the linked income will cease accordingly.</p>
+          <ul>
+            <li>Linked rent is split between the property's owners in the same proportions as the property itself, and stops automatically when the property is sold. To see the split, click the property's name in Year View &gt; Property.</li>
+          </ul>
         `,
       },
       "linked-reverse-mortgage": {
@@ -623,12 +704,19 @@ window.SHACKADEMY_SECTIONS = {
       basics: {
         description: `
           <p>This is where you enter a <strong>defined contribution (money purchase) pension</strong> - including personal pensions, SIPPs, workplace pensions, and GPPs.</p>
-          <p>The pension Type field is largely informational, but there is one important distinction: personal pensions (PPP/GPP/SIPP) and occupational schemes have different rules for how tax relief on contributions is applied.</p>
+          <p>The pension <strong>Type</strong> decides how Voyant gives tax relief on contributions:</p>
+          <ul>
+            <li><strong>Personal Pension, Group Personal Pension, SIPP, Group SIPP</strong> - relief at source. Year View &gt; Expenses shows the contribution at its net cost, and any higher-rate relief comes back the following year as a Tax Credit in Cash Flow.</li>
+            <li><strong>Occupational Pension, SSAS</strong> - net pay. Expenses shows the full contribution, and income tax is worked out on the salary minus the contribution.</li>
+            <li><strong>Salary sacrifice</strong> set to Yes overrides the Type: income tax and National Insurance are both worked out on the salary minus the contribution.</li>
+          </ul>
+          <p>Choose the Type that matches how the scheme really gives relief. That's a question for the employer or the scheme.</p>
           <p>Key things to check:</p>
           <ul>
-            <li>Enter contributions gross - Voyant applies tax relief automatically</li>
+            <li>Enter the amount going into the pension. For a relief at source Type, Voyant adds the basic-rate relief itself, so Expenses shows less than the pot receives.</li>
             <li>If employer contributions apply, toggle the Employer Contribution section and link to the relevant employment</li>
             <li>Ensure the withdrawal limit tab reflects at least the minimum pension access age for your pension</li>
+            <li>Saving a money purchase pension also creates a linked 'Drawdown - (pension name)' pot at nil. It's used for money that's crystallised but not yet taken. It has its own Growth tab, which doesn't automatically follow the main pension.</li>
           </ul>
         `,
       },
@@ -638,24 +726,30 @@ window.SHACKADEMY_SECTIONS = {
         description: `
           <p>The Timing tab controls <strong>when contributions are allowed</strong> in this plan. Voyant uses timeline events - milestones you define, like Retirement or a specific age - rather than fixed calendar dates, so your plan stays dynamic as assumptions change.</p>
           <ul>
-            <li>It is imperative that this is set if you want the account to be able to receive contributions.</li>
-            <li>As a baseline, you can set the start to 'Plan Start' and end to 'Plan End' to allow contributions throughout.</li>
+            <li>For a pension, contributions default to running from Plan Start to your Retirement event. Change the events if your contributions stop at a different time.</li>
+            <li>Contributions need both a Contributions Start and a Contributions End event. Without both, none are made.</li>
           </ul>
         `,
       },
       steps: { description: window.TAB_DESCRIPTIONS.steps },
-      crystallisations: {
+      crystallizations: {
         description: `
           <p>The Crystallisations tab allows you to model <strong>specific pension crystallisation events</strong> - the point at which pension benefits are formally accessed and tax-free cash is taken.</p>
-          <p>For regular income in retirement, Voyant handles crystallisation automatically when the pension begins drawdown according to the Timing settings.</p>
-          <p>Use this tab if you need to model a specific partial crystallisation at a known future date or event.</p>
-          <p>If you want to model regular, consistent crystallisation events then it may be easier to manage that using the 'Planned Withdrawals' tab.</p>
+          <p>Use this tab for a specific crystallisation, such as taking tax-free cash at an event. Tick 'Apply Crystallisation Instructions', and check the crystallisation is listed after saving.</p>
+          <ul>
+            <li>Crystallising 100% closes the pension to further contributions. Voyant suggests a Flexi Planned Withdrawal, or crystallising 99%, if contributions need to carry on.</li>
+            <li>When to take money out is set on the Withdrawal Limit and Planned Withdrawals tabs, not Timing.</li>
+            <li>If you want to model regular, consistent crystallisation events then it may be easier to manage that using the 'Planned Withdrawals' tab.</li>
+          </ul>
         `,
       },
       beneficiaries: {
         description: `
           <p>The Beneficiaries tab reflects what happens to your pension when you die.</p>
           <p>Refer to the tooltip for more details on the options available.</p>
+          <ul>
+            <li>Beneficiary percentages default to 0%. Set them to match your nomination with the provider.</li>
+          </ul>
         `,
       },
       transfers: { description: window.TAB_DESCRIPTIONS.transfers },
@@ -686,7 +780,7 @@ window.SHACKADEMY_SECTIONS = {
         description: `
           <p>This is where you enter a <strong>defined benefit pension</strong> - common in the public sector (NHS, teachers, civil service, armed forces) and some older workplace schemes.</p>
           <p>Unlike defined contribution pensions, the benefit is a guaranteed income based on your salary and years of service - not a pot of money.</p>
-          <p>The Status field is critical as it will determind how Voyant treats the plan:</p>
+          <p>The Status field is critical as it will determine how Voyant treats the plan:</p>
           <ul>
             <li><strong>Active</strong> - you are still building up benefits; link to your employment entry</li>
             <li><strong>Deferred</strong> - you have left the scheme but not yet started taking benefits; enter the known deferred benefit amount</li>
@@ -699,6 +793,9 @@ window.SHACKADEMY_SECTIONS = {
         description: `
           <p>The Timing tab for a Final Salary pension sets <strong>when you intend to start drawing an income</strong> from the plan. This is typically your planned retirement date or a specific age event.</p>
           <p>If you start taking benefits before the scheme's Normal Retirement Age (entered in the Basics tab), Voyant will apply the actuarial reduction rate automatically.</p>
+          <ul>
+            <li>Start Pension defaults to your Retirement event. Giving the pension its own event means retirement can move without moving it.</li>
+          </ul>
         `,
       },
     },
@@ -759,6 +856,7 @@ window.SHACKADEMY_SECTIONS = {
             <li>Check the Type and Tax Status (if relevant) carefully</li>
             <li>For 'Linked Drawdown' plans i.e. those created automatically when a Money Purchase pension is entered, review the growth tab to ensure it reflects what you expect.</li>
             <li>A Linked Drawdown pension only becomes relevant if you take tax free cash without taking the full taxable element of the pension.</li>
+            <li>Saving a money purchase pension also creates a linked 'Drawdown - (pension name)' pot at nil. It's used for money that's crystallised but not yet taken. It has its own Growth tab, which doesn't automatically follow the main pension.</li>
           </ul>
         `,
       },
@@ -799,7 +897,7 @@ window.SHACKADEMY_SECTIONS = {
           <p>This is where you enter the <strong>UK State Pension</strong> for each person in the plan.</p>
           <p>Get the State Pension forecast for each person at <a href="https://www.gov.uk/check-state-pension" target="_blank" rel="noopener noreferrer">gov.uk/check-state-pension</a> - this gives you the projected amount and exact State Pension Age based on date of birth.</p>
           <ul>
-            <li>Voyant escalates the State Pension automatically using the Triple Lock assumption from Plan Settings</li>
+            <li>Voyant increases the State Pension each year using the earnings and price inflation rates in Plan Settings. Check Plan Settings if you want to see or change them.</li>
             <li>You can model deferral by setting a Start Age later than the specified State Pension Age</li>
           </ul>
         `,
@@ -873,6 +971,8 @@ window.SHACKADEMY_SECTIONS = {
             <li><strong>Number of Shares Remaining</strong> in the 'Basics' tab reflects the unvested portion of the grant</li>
             <li><strong>Remaining Vesting Period</strong> in the 'Basics' tab spreads vesting across future years</li>
             <li>You can use <strong>Estimate Schedule</strong> to provide a starting point</li>
+            <li>Estimate Schedule splits the shares evenly across the years. For cliff or uneven vesting, use Add Year.</li>
+            <li>After a plan-year update, remove any vest years now in the past, or the chart shows an error.</li>
           </ul>
           <p>Voyant uses this information to introduce shares into your plan gradually. Check the timing carefully to ensure vesting aligns with your expectations.</p>
         `,
@@ -886,6 +986,7 @@ window.SHACKADEMY_SECTIONS = {
             <li><strong>Sell all available</strong> will realise all shares at a chosen event</li>
             <li><strong>Recurring strategies</strong> allow you to model ongoing income from share sales</li>
             <li><strong>None</strong> means shares are retained unless accessed elsewhere</li>
+            <li>The default, None, keeps vested shares invested for the whole plan.</li>
           </ul>
           <p>Check the impact in Year View to ensure sales occur at the expected times and that the remaining share balance behaves as intended.</p>
         `,
@@ -913,7 +1014,7 @@ window.SHACKADEMY_SECTIONS = {
   debt: {
     name: "Debt",
     typeIndicator: "debtInputOwnerLabel",
-    lessons: ["property-basics", "overpayment", "paydown-mortgage"],
+    lessons: ["property-basics", "overpayments", "paydown-mortgage"],
     tabs: {
       basics: {
         description: `
@@ -930,7 +1031,12 @@ window.SHACKADEMY_SECTIONS = {
         description: window.TAB_DESCRIPTIONS.timing,
       },
       steps: {
-        description: window.TAB_DESCRIPTIONS.steps,
+        description: `
+          ${window.TAB_DESCRIPTIONS.steps}
+          <ul>
+            <li>Changing only the interest rate in a Step doesn't change the payment. Tick Payment in the same Step and enter the new payment too.</li>
+          </ul>
+        `,
       },
       "payment-sources": {
         description: `
@@ -969,7 +1075,7 @@ window.SHACKADEMY_SECTIONS = {
   "line-of-credit": {
     name: "Line of Credit",
     typeIndicator: "lineOfCreditInputOwnerLabel",
-    lessons: ["property-basics", "overpayment", "paydown-mortgage"],
+    lessons: ["property-basics", "overpayments", "paydown-mortgage"],
     tabs: {
       basics: {
         description: `
@@ -1022,7 +1128,13 @@ window.SHACKADEMY_SECTIONS = {
         `,
       },
       "liquidation-limits": {
-        description: window.TAB_DESCRIPTIONS["liquidation-limits"],
+        description: `
+          <p>The Withdrawal Limit tab controls <strong>whether and when Voyant can borrow from this line of credit</strong> to meet expenses.</p>
+          <p>For a line of credit, this defaults to Do Not Allow, so Voyant won't borrow from it. As Needed lets Voyant borrow to cover any shortfall once other accessible assets have run out, which can make a plan look funded while the debt grows.</p>
+          <ul>
+            <li>Check Year View &gt; Debts to see how the balance changes over time</li>
+          </ul>
+        `,
       },
       drawdowns: {
         description: window.TAB_DESCRIPTIONS.drawdowns,
@@ -1056,7 +1168,12 @@ window.SHACKADEMY_SECTIONS = {
         `,
       },
       timing: {
-        description: window.TAB_DESCRIPTIONS.timing,
+        description: `
+          ${window.TAB_DESCRIPTIONS.timing}
+          <ul>
+            <li>For a new arrangement, the timing defaults to the primary person's retirement.</li>
+          </ul>
+        `,
       },
       "onetime-payments": {
         description: `
@@ -1078,6 +1195,7 @@ window.SHACKADEMY_SECTIONS = {
     tabs: {
       basics: {
         description: `
+          <p>This is for money you have lent to someone else. For money you owe, use Debt.</p>
           <p>This is where you enter a <strong>loan owed to someone in the plan</strong>.</p>
           <p>In this section, the lender is the person in the plan who has lent the money, and the borrower is the person who will repay it. Repayments are treated as money coming back into the plan.</p>
           <ul>
@@ -1125,6 +1243,7 @@ window.SHACKADEMY_SECTIONS = {
             <li>Use <strong>Employee</strong> insurance where cover is linked to employment, such as death-in-service cover based on a salary multiple</li>
             <li>Use <strong>Personal</strong> insurance where you are entering a policy benefit directly</li>
             <li>Check Year View or Life Needs Insight to confirm the policy pays out as expected</li>
+            <li>A payout goes into the beneficiary's cash. It's listed in Year View &gt; Cash Flow under Not Displayed on Chart, not as an income bar.</li>
           </ul>
         `,
       },
@@ -1148,6 +1267,7 @@ window.SHACKADEMY_SECTIONS = {
           <ul>
             <li>Beneficiaries may include a spouse, estate, another person in the plan, someone outside the plan, or a charity</li>
             <li>If the policy is held in trust, make sure the beneficiaries reflect the trust arrangement</li>
+            <li>All beneficiaries default to 0%. Set them to match the policy. If they're left at 0%, the payout goes into the insured person's estate.</li>
           </ul>
         `,
       },
@@ -1199,6 +1319,7 @@ window.SHACKADEMY_SECTIONS = {
           <ul>
             <li>Make sure the beneficiaries reflect the actual policy or trust arrangement</li>
             <li>Check whether proceeds are intended for a spouse, estate, other beneficiaries, or charity</li>
+            <li>All beneficiaries default to 0%. Set them to match the policy. If they're left at 0%, the payout goes into the insured person's estate.</li>
           </ul>
         `,
       },
@@ -1236,11 +1357,12 @@ window.SHACKADEMY_SECTIONS = {
 
       timing: {
         description: `
-          <p>The Timing tab controls <strong>when income protection cover and premiums apply</strong>.</p>
+          <p>The Timing tab controls <strong>when income protection cover and premiums apply</strong>, from the <strong>Protection Starts</strong> event to the <strong>Protection Ends</strong> event.</p>
           <p>This matters because the policy should only provide cover during the period it is active.</p>
           <ul>
-            <li>Set the policy start and end timing to match the actual cover period</li>
-            <li>Review Year View to confirm premiums and benefits appear in the right years</li>
+            <li>Set these to match the policy's actual cover period</li>
+            <li>Benefits also stop at the Benefit Duration or Max Benefit Age on the Basics tab, whichever comes first (tested). In testing, the benefit was still paid in the year the Max Benefit Age was reached.</li>
+            <li>Check Year View to confirm premiums and benefits appear in the right years</li>
           </ul>
         `,
       },
@@ -1292,11 +1414,11 @@ window.SHACKADEMY_SECTIONS = {
       timing: {
         description: `
           <p>The Timing tab controls <strong>when the long-term care policy is active</strong>.</p>
-          <p>This affects when premiums are paid and when benefits may be available in the plan.</p>
+          <p>This sets when premiums are paid. Voyant doesn't pay out a benefit from a long-term care policy, so only the premiums affect the plan. To model care, add the cost as a goal and any expected payout as Other Income. The Aged Care lesson covers this.</p>
           <ul>
             <li>Set the policy start timing to match the actual or expected policy start date</li>
             <li>Check whether premium payments are lifetime or for a fixed period</li>
-            <li>Use Year View to confirm premiums and benefits appear in the expected years</li>
+            <li>Use Year View to confirm premiums appear in the expected years</li>
           </ul>
         `,
       },
@@ -1320,6 +1442,7 @@ window.SHACKADEMY_SECTIONS = {
             <li>To move money regularly between two accounts (e.g. GIA to ISA), select both accounts and tick 'Recurring'</li>
             <li>A transfer can be entered from either side - as a transfer-in to the receiving account, or a transfer-out from the source account</li>
             <li>Use 'Transfer Before Paying Expenses' if you want to prevent a lump sum being used to meet expenses first</li>
+            <li>Money can go into a pension by a Transfer from All Surplus, or from an account such as a GIA or ISA. A Default Surplus Account (your cash) can't be the source of a transfer into a pension: pensions aren't offered as a destination when cash is the source.</li>
           </ul>
         `,
       },
@@ -1347,6 +1470,7 @@ window.SHACKADEMY_SECTIONS = {
       "managing-withdrawals",
       "pension-withdrawals",
       "utilising-tax-bands",
+      "lump-sums",
     ],
     tabs: {
       basics: {
@@ -1399,19 +1523,22 @@ window.SHACKADEMY_SECTIONS = {
             <li>Select the owner and give the plan a name</li>
             <li>Decide whether designated assets (set up in Asset Distribution) should be liquidated to pay any IHT due, or passed on as-is</li>
             <li>Only one Estate Plan can be set up per person</li>
-            <li>Pensions are not normally part of the estate - their distribution is set on each pension's own Beneficiaries screen</li>
+            <li>By default, the estate goes 100% to your spouse or partner, after any Charity and Other lines</li>
+            <li>The distribution order is Charity, Other, then Spouse, so the residual beneficiary (typically the spouse) comes last</li>
+            <li>Click each row to enter its details, choosing 'Percentage', 'Amount', or (for 'Other') 'Percentage of Threshold'</li>
+            <li>For 'Other', use the Distribution Breakdown to split the bequest between named people, 'Person Outside of Plan', or a Trust</li>
+            <li>Pensions aren't distributed here. Each pension's own Beneficiaries tab decides who receives it. Voyant includes unused pensions in the estate for inheritance tax in line with announced rules. Check the current rules on GOV.UK.</li>
+            <li>Check Overview &gt; Legacy to confirm the distribution is working as expected</li>
           </ul>
         `,
       },
       "assets-designation": {
         description: `
-          <p>The Asset Distribution tab is where you set <strong>who receives what</strong> from the estate, and in what order.</p>
+          <p>The Asset Distribution tab is where you leave <strong>a specific asset to a specific person</strong>.</p>
           <ul>
-            <li>Set the Distribution order so that the residual beneficiary (typically the spouse) is last - e.g. Other > Charity > Spouse</li>
-            <li>Click each row to enter its details, choosing 'Percentage', 'Amount', or (for 'Other') 'Percentage of Threshold'</li>
-            <li>For 'Other', use the Distribution Breakdown to split the bequest between named people, 'Person Outside of Plan', or a Trust</li>
-            <li>Specific items bequeathed to specific beneficiaries can also be modelled here</li>
-            <li>Check Overview > Legacy to confirm the distribution is working as expected</li>
+            <li>Click Add Distribution, then select the asset</li>
+            <li>'Contingent inherited assets' are your spouse's or partner's assets, listed in case they die first</li>
+            <li>Check Overview &gt; Legacy afterwards</li>
           </ul>
         `,
       },
@@ -1427,7 +1554,7 @@ window.SHACKADEMY_SECTIONS = {
     typeIndicator: "rateOfInflation",
     lessons: ["intro-to-voyant"],
     tabs: {
-      defaultAges: {
+      defaultages: {
         description: `
           <p>Sets default age-related assumptions used across the plan.</p>
           <ul>
@@ -1438,54 +1565,56 @@ window.SHACKADEMY_SECTIONS = {
       },
       basics: {
         description: `
-          <p>Sets the default <strong>Inflation and Growth</strong> assumptions used throughout the plan - these apply to new items as they're added, and can be overridden at the individual item level.</p>
+          <p>Sets the default <strong>Inflation and Growth</strong> assumptions used throughout the plan. Individual items can use their own figure instead.</p>
           <ul>
             <li>The Inflation Rate is also used for any 'Present Value' entry, and to escalate amounts entered in Steps</li>
-            <li>National Average Earnings escalates Employment and Other Income, and forms part of the Triple Lock used for the State Pension</li>
-            <li>Nil Rate Band Escalation and IHT Property Exemption Escalation Rate only take effect once the relevant frozen thresholds start to escalate (Nil Rate Band from 2030)</li>
-            <li>The two toggles at the bottom control whether all investment/retirement and savings/cash accounts default to growing via asset allocation rather than a fixed rate - changing these only affects new accounts going forward</li>
+            <li>National Average Earnings escalates Employment and Other Income, and is one of the rates Voyant uses to increase the State Pension</li>
+            <li>Nil Rate Band Escalation and IHT Property Exemption Escalation Rate: Voyant applies legislated freezes first. These rates are used after a freeze ends.</li>
+            <li>The two toggles at the bottom: when switched on, every investment and pension account (or every savings and cash account) grows by asset allocation, and the growth choice on each account is locked.</li>
           </ul>
-          <p>Changing these settings only affects <strong>new plans</strong> created after the change - for existing plans, growth assumptions can only be updated at the individual item level.</p>
+          <p>Changing a rate here updates every item in this plan that's still on the default. Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</p>
         `,
       },
       fees: {
         description: `
           <p>Sets default <strong>Product Fees</strong> and <strong>Ongoing Advice Fees</strong> by account type (Cash Savings, Taxable, Tax-Deferred, Tax-Free), plus default Taxable Investment assumptions.</p>
           <ul>
-            <li>All fees are deducted from capital growth, and can be overridden at the individual account level</li>
+            <li>The Product Fee is deducted from growth. The Ongoing Advice Fee is treated as a withdrawal: it's taken out of the account each year and included in the account's Withdrawals in Year View. It's also listed under Not Displayed on Chart in Year View &gt; Cash Flow and Expenses.</li>
+            <li>Changing a fee here updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
             <li>'Account Liquidation Annually' sets the default 'Capital Gains Realized Annually' figure for taxable investments</li>
             <li>'Onshore Bond Default Internal Tax Rate' applies only to growth on onshore bonds, to better reflect their relative tax treatment versus offshore bonds</li>
           </ul>
+          <p>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</p>
+          <p>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</p>
         `,
       },
-      assetAllocation: {
+      assetallocation: {
         description: `
           <p>This tab defines the <strong>default asset allocation</strong> used when setting an asset to grow using Portfolio/Holdings, rather than a fixed growth rate. This can be changed on an individual plan level.</p>
           <ul>
             <li>Used in conjunction with the Market Assumptions tab, which sets the underlying expected returns for each asset class</li>
-            <li>If 'Grow all investment and retirement accounts using asset allocation' is switched on (Inflation/Growth tab), all <strong>accounts set up after the change</strong> will use these allocations by default</li>
+            <li>If 'Grow all investment and retirement accounts using asset allocation' is switched on (Inflation/Growth tab), every investment and pension account (or every savings and cash account, for the other toggle) grows by asset allocation, and the growth choice on each account is locked</li>
             <li>Individual accounts can have their own asset allocation set on their Growth tab</li>
           </ul>
         `,
       },
-      marketAssumptions: {
+      marketassumptions: {
         description: `
-          <p>This tab sets the <strong>expected return, volatility, and correlation assumptions</strong> for each asset class, used when accounts are grown via asset allocation.</p>
+          <p>This tab shows the <strong>market assumptions dataset</strong> the plan uses: an expected return, standard deviation and yield for each asset class. These are used when accounts grow by asset allocation.</p>
           <ul>
             <li>These assumptions work together with the Asset Allocation tab</li>
-            <li>Voyant provides a default set of market assumptions, which can be reviewed and changed for the plan if a different house view is preferred</li>
-            <li>These are the only Plan Settings assumptions that Voyant may periodically update on your behalf</li>
+            <li>Switching dataset changes the asset classes. The default allocation then becomes 100% cash, so allocations need re-entering here and on each Portfolio/Holdings account.</li>
           </ul>
         `,
       },
-      majorLoss: {
+      majorloss: {
         description: `
           <p>This tab lets you define a <strong>custom market crash / major loss scenario</strong> that can be applied to a plan via a Timeline event, or used by the Market Crash Insight.</p>
           <ul>
             <li>'Default Age' sets the age of the primary client at which the loss begins by default - this can be changed when the event is added to the Timeline</li>
-            <li>'Number of Years' (1-5) sets how long the loss period runs for, with a separate growth deviation entered for each year</li>
-            <li>Deviations can be set as a 'Fixed Growth' adjustment, an 'Allocation Percentile' adjustment, or both - fixed growth affects accounts using a set growth rate, while allocation percentile affects accounts grown via asset allocation</li>
-            <li>To apply: add a 'Major Loss' Special Event to the Timeline, then check Year View > Investments and Pensions > Net Growth to confirm the deviation has been applied and that growth returns to normal afterwards</li>
+            <li>'Number of Years' (1-5) sets how long the loss period runs for, with the growth for that year entered for each year</li>
+            <li>Fixed Growth replaces the growth rate of accounts on an entered rate. Allocation Percentile applies to Portfolio/Holdings accounts. Accounts with Growth is Fixed ticked aren't affected.</li>
+            <li>To apply: add a 'Major Loss' Special Event to the Timeline, then check Year View &gt; Investments and Pensions &gt; Net Growth to confirm the loss has been applied and that growth returns to normal afterwards</li>
           </ul>
         `,
       },
@@ -1495,6 +1624,8 @@ window.SHACKADEMY_SECTIONS = {
           <ul>
             <li>This order can be reordered by dragging account types into your preferred sequence</li>
             <li>Individual goals can override this via their own Payment Sources tab</li>
+            <li>Cash in the Default Surplus Accounts is used first. Within each account type, the primary person's accounts are used before their partner's, and withdrawals aren't split between you.</li>
+            <li>Trusts, EIS, SEIS and VCTs are never used to cover a shortfall.</li>
           </ul>
         `,
       },
@@ -1510,7 +1641,7 @@ window.SHACKADEMY_SECTIONS = {
         description: `
           <p>These settings control a number of <strong>plan-wide calculation behaviours</strong>.</p>
           <ul>
-            <li>'Transfer all excess income / credits to savings' and 'Save excess income after retirement' control whether unallocated surplus is assumed spent (the default) or saved - these can be combined to cover both pre- and post-retirement</li>
+            <li>'Transfer all excess income / credits to savings' and 'Save excess income after retirement' control whether unallocated surplus is assumed spent (the default) or saved. Each setting is described in its own tooltip. Check Year View after changing either one.</li>
             <li>'Assume predeceased upon simultaneous death' affects how IHT and estate calculations treat a couple who die in the same year</li>
             <li>'Crystallise final salary before money purchase' relates to the historic Lifetime Allowance test ordering and is rarely needed</li>
             <li>The remaining toggles control what's shown on the Cashflow chart and Income vs Expenditure Overview by default - they affect display only, not the underlying calculations</li>
@@ -1520,30 +1651,9 @@ window.SHACKADEMY_SECTIONS = {
     },
   },
 
-  yearView: {
-    name: "Year View",
-    lessons: ["year-view"],
-    tabs: {
-      basics: {
-        description: `
-          <p>Year View shows a <strong>year by year breakdown</strong> of every account in the plan, split across separate tables for Cash Flow (income), Expenses, Investments, Pensions, Property, Debts, Protection (insurance), and Taxes.</p>
-          <p>You can navigate through years in any of the following ways:</p>
-          <ul>
-            <li>Use the arrow keys on your keyboard</li>
-            <li>Use the floating arrows on the left and right of the screen</li>
-            <li>Use the slider in the middle of the page (under the graph, and above the tab headings)</li>
-            <li>Use the year selector at the top right of the page</li>
-          </ul>
-          <p>Other notes:</p>
-          <ul>
-            <li>Each table shows the account's balance at the end of that year, along with growth, contributions, and withdrawals where relevant</li>
-            <li>This is a useful place to check that transfers, withdrawals, and growth assumptions are behaving as expected</li>
-            <li>To view these figures in real money terms, navigate to Dashboard, select the three vertical dots in the top right corner (next to 'Year View') and select 'Real Money' - you can't make this change in Year View itself</li>
-          </ul>
-        `,
-      },
-    },
-  },
+  // ============================================================
+  // Carryover Assumptions
+  // ============================================================
 
   "carry-over": {
     name: "Carryover Assumptions",
@@ -1555,13 +1665,539 @@ window.SHACKADEMY_SECTIONS = {
           <p>Carryover Assumptions are used to capture <strong>tax-related details that predate the start of the plan</strong>.</p>
           <p>Select the relevant person at the top left before entering details, as these assumptions are entered per-person.</p>
           <ul>
-            <li><strong>Basics</strong> - any outstanding tax rebates or amounts due from before the plan starts, and which country's tax rules should apply (England/Wales, Scotland, or Northern Ireland)</li>
+            <li><strong>Basics</strong> - any outstanding tax rebates or amounts due from before the plan starts, and the person's Country (England, Scotland, Wales or Northern Ireland). Country is set for each person, and it decides which income tax bands apply to them, including on rent. Shackademy sets this when your plan is created, so you only need to change it if your circumstances change.</li>
             <li><strong>Pension Allowance & Carry Forward</strong> - any pension protections, allowances, or carry forward from before the plan starts</li>
             <li><strong>Nil Rate Band Carry Forward & Previous Transfers</strong> - any Inheritance Tax allowances inherited from a previously deceased spouse or civil partner, and any gifts made before the plan starts that may still be relevant for IHT</li>
             <li><strong>Capital Gains</strong> - any gains already realised, losses carried forward, or relief previously claimed before the plan starts</li>
             <li><strong>Tax Deductions</strong> and <strong>Tax Credits</strong> - any recurring deductions or credits not captured elsewhere in the plan</li>
           </ul>
           <p>Where it's unclear whether any of these apply or what figures to use, providers, account statements, previous tax returns, and the Shackademy community can be useful resources.</p>
+        `,
+      },
+    },
+  },
+
+  // ============================================================
+  // Year View (route-detected; one guide per Year View tab)
+  // ============================================================
+
+  yearView: {
+    name: "Year View",
+    route: "year-view",
+    tabSource: "yearView",
+    lessons: ["year-view"],
+    tabs: {
+      basics: {
+        description: `
+          <p>Year View shows a <strong>year by year breakdown</strong> of every account in the plan, split across separate tables for Cash Flow (income), Expenses, Investments, Pensions, Property, Debts, Protection (insurance), and Taxes.</p>
+          <ul>
+            <li>Each table shows the account's balance at the end of that year, along with growth, contributions, and withdrawals where relevant</li>
+            <li>This is a useful place to check that transfers, withdrawals, and growth assumptions are behaving as expected</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      cashflow: {
+        description: `
+          <p>Cash Flow lists the <strong>money coming into the plan this year</strong>: income, plus any withdrawals from accounts used to meet spending. The Category column shows what kind each one is.</p>
+          <ul>
+            <li>Items under <strong>Not Displayed on Chart</strong>, such as insurance payouts and estate credits, are real money coming in. They just aren't drawn as bars on the chart.</li>
+            <li>A windfall or property sale shows here in the year it's received.</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      expenses: {
+        description: `
+          <p>Expenses lists <strong>what the plan pays out this year</strong>: goals, debt payments, contributions into accounts, fees and tax.</p>
+          <ul>
+            <li>The <strong>Category</strong> column shows each goal's priority. If money runs short, lower-priority goals are cut first.</li>
+            <li>The <strong>Unfulfilled</strong> column shows any amount the plan couldn't pay.</li>
+            <li>Items under <strong>Not Displayed on Chart</strong> are real payments that aren't drawn on the chart, for example an Ongoing Advice Fee (category Fees).</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      investments: {
+        description: `
+          <p>Investments shows <strong>each savings and investment account</strong> at the end of this tax year, with its growth, contributions and withdrawals.</p>
+          <ul>
+            <li><strong>Click an account's name</strong> to see the detail:
+              <ul>
+                <li><strong>Balance:</strong> yield, the growth rates that make up Net Growth, the product fee and ongoing advice fee rates, and Net Growth After Annual Fees.</li>
+                <li><strong>Allocation:</strong> how the account is invested.</li>
+                <li><strong>Contributions:</strong> planned and actual amounts, unscheduled contributions, transfers in and out, and Contribution Sources (where the money came from).</li>
+                <li><strong>Withdrawals:</strong> actual and scheduled.</li>
+              </ul>
+            </li>
+            <li>Net Growth includes any yield and is after the product fee but before the ongoing advice fee, so it can differ from the rate you entered.</li>
+            <li>An Ongoing Advice Fee is taken out of the account as a withdrawal, not deducted from growth. It's included in the account's <strong>Withdrawals</strong> figure, and the detail panel lists it under <strong>Fees</strong>. It also appears under <strong>Not Displayed on Chart</strong> in both Cash Flow and Expenses, with the category Fees.</li>
+            <li>If contributions aren't going in as you expected, check the account's <strong>Timing</strong> tab: contributions need both a start and an end event.</li>
+            <li>Use this tab to check that Transfers, Sweeps and Planned Withdrawals move money as you expected.</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      retirements: {
+        description: `
+          <p>Pensions shows <strong>each pension</strong> at the end of this tax year, with its growth, contributions and withdrawals.</p>
+          <ul>
+            <li><strong>Click a pension's name</strong> for the same detail as on Investments. As on Investments, an Ongoing Advice Fee is taken out as a withdrawal and is included in the pension's Withdrawals figure. Contribution Sources shows your own and your employer's contributions separately, including any employer NI saving added to the pension.</li>
+            <li>If contributions aren't going in as you expected, check the pension's <strong>Timing</strong> tab.</li>
+            <li>If a pension isn't being drawn when you expect, check its Withdrawal Limit start event.</li>
+            <li>If you've crystallised money without taking it, it sits in the pension's linked "Drawdown" pot, which has its own growth rate.</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      properties: {
+        description: `
+          <p>Property shows <strong>each property's value</strong> at the end of this tax year, any debt linked to it, and the equity left.</p>
+          <ul>
+            <li><strong>Click a property's name</strong> to see each owner's cost base, value and ownership share, at the start and end of the year.</li>
+            <li>In the year a property is sold, check that any linked mortgage is cleared and the proceeds appear in Cash Flow.</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      debts: {
+        description: `
+          <p>Debt shows <strong>each debt's</strong> required payment, the payment made, any extra payment, the balance at the end of this tax year and the interest rate.</p>
+          <ul>
+            <li><strong>Click a debt's name</strong> to see how the payment splits between interest and capital.</li>
+            <li>Use it to check that a mortgage reduces as expected, and is cleared by any one-off payment or linked property sale.</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      insurances: {
+        description: `
+          <p>Protection shows <strong>each policy in force this year</strong>, with its type, premium and benefit amount. A policy that has ended no longer appears.</p>
+          <ul>
+            <li>A payout appears in Cash Flow under Not Displayed on Chart, in the year it's paid.</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+      taxdetails: {
+        description: `
+          <p>Taxes shows <strong>the tax worked out for each person this year</strong>. <strong>Expand All</strong> opens every section.</p>
+          <ul>
+            <li><strong>Click a rate row</strong> in Tax Summary (for example Income Tax Brackets) to see the bands and rates Voyant uses.</li>
+            <li>To see how your own income falls into those bands, click <strong>Tax on Non-Savings Income</strong> under Taxes.</li>
+            <li>Some other rows open a breakdown too:
+              <ul>
+                <li><strong>Non-Savings Income</strong> shows where the income came from.</li>
+                <li><strong>Income Deductions</strong> lists the deductions, such as net pay and salary sacrifice pension contributions. Relief at source contributions show as <strong>Relief At Source Pension Contributions</strong> and <strong>Tax Credits</strong> instead.</li>
+                <li><strong>Other Taxes (NIC, Bonds)</strong> shows which income it applies to.</li>
+              </ul>
+            </li>
+            <li>PAYE tax on salary shows as paid at source in the same year. Tax on other income shows as due the following year.</li>
+            <li>Check the rates and bands Voyant uses against GOV.UK if you need to rely on a figure.</li>
+          </ul>
+          ${YEAR_VIEW_NAVIGATION}
+        `,
+      },
+    },
+  },
+
+  // ============================================================
+  // Insights (route-detected; one guide per insight)
+  // ============================================================
+
+  insights: {
+    name: "Insights",
+    route: "insights",
+    titleOnly: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Insights give you many ways to <strong>stress test and review your plan</strong>. For example: how much more you'd need to save, what return your investments would need, how a market crash or higher inflation could affect you, or how much you could spend in retirement.</p>
+          <p>Running an insight doesn't change your plan, so you can explore as many as you like. Choose one to see what it does, and the Shackademy guide for that insight will appear here.</p>
+        `,
+      },
+    },
+  },
+
+  "insight-annual-savings": {
+    name: "Annual Savings",
+    route: "insights/annual-savings",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Annual Savings works out <strong>how much extra you'd need to save each year</strong>, between the Start Event and End Event, so the plan has no shortfall after the End Event.</p>
+          <ul>
+            <li>Check both events before you run it. The defaults may not be the period you have in mind.</li>
+            <li>The result doesn't say which account the savings would go into. To test it, add the contribution to an account yourself, ideally in a What If.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-goal-priority": {
+    name: "Goal Priority Analysis",
+    route: "insights/goal-priority",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Goal Priority Analysis shows <strong>what happens to your other goals if you leave some out</strong>. Untick individual goals, or whole priority levels, and compare the Original and Simulated results.</p>
+          <ul>
+            <li>Each goal's priority is set on its Basics tab. New goals start at the highest priority.</li>
+            <li>Unticking a goal here doesn't remove it from your plan.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-historical": {
+    name: "Historic",
+    route: "insights/historical",
+    titleOnly: true,
+    headingButton: true,
+    lessons: [...INSIGHT_LESSONS, "monte-carlo"],
+    tabs: {
+      basics: {
+        description: `
+          <p>Historic applies <strong>past stock market returns</strong> to your plan, year by year, over the period you choose.</p>
+          <ul>
+            <li>It only affects accounts that grow by Portfolio/Holdings. If none do, the result won't change and Voyant opens the "Accounts Using Asset Allocation" window.</li>
+            <li>There are no extra outputs. Read the chart, or Year View and Table View.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-inflation": {
+    name: "Inflation Adjustment",
+    route: "insights/inflation",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Inflation Adjustment adds <strong>extra inflation</strong>, on top of the plan's own rates, either for the whole plan or for a range of years you set with the slider.</p>
+          <ul>
+            <li>The Results table lists every rate it raised. Check it to see what is and isn't included.</li>
+            <li>To see the effect, switch the chart from Cash Flow to another view, such as Assets, or open Year View or Table View.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-investment-returns": {
+    name: "Investment Returns",
+    route: "insights/investment-returns",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Investment Returns works out <strong>the average yearly return, after fees,</strong> that your existing investments would need between the Start Event and End Event for the plan to avoid a shortfall.</p>
+          <ul>
+            <li>Because it's an average, choosing a later End Event can hide a shortfall early in the plan.</li>
+            <li>"Include Cash Accounts" counts cash savings as investments. Leave it unticked for a figure that applies to your investments only.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-life-needs": {
+    name: "Life Needs",
+    route: "insights/life-needs",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Life Needs estimates <strong>how much extra life cover each partner would need</strong> for the survivor not to run out of money. It has no inputs.</p>
+          <ul>
+            <li>As Voyant's description says, it assumes death at the start of the plan's second year.</li>
+            <li>It takes account of the cover already in the plan.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-annuity": {
+    name: "Longevity Risk",
+    route: "insights/annuity",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Longevity Risk shows <strong>how buying an annuity with part of your pensions could affect the plan</strong>, including if you live longer than planned.</p>
+          <ul>
+            <li>Choose who buys the annuity, how the rate is set, and what share of pensions to use.</li>
+            <li>Generate Plan from Results creates a separate plan with the annuity in it. Your current plan isn't changed.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-loss-capacity": {
+    name: "Loss Capacity",
+    route: "insights/loss-capacity",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Loss Capacity works out <strong>how much of your invested assets you could lose</strong> at the Loss Event and still meet your goals.</p>
+          <ul>
+            <li>If the plan already has a shortfall, the result is nil. Fix the shortfall first, or use a What If.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-lump-sum-savings": {
+    name: "Lump Sum Savings",
+    route: "insights/lump-sum-savings",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Lump Sum Savings works out <strong>the one-off amount needed at the chosen event</strong> to prevent shortfalls after it. For example, it can show what a property or business would need to sell for.</p>
+        `,
+      },
+    },
+  },
+
+  "insight-market-crash": {
+    name: "Market Crash",
+    route: "insights/market-crash",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Market Crash applies <strong>the Major Loss scenario set in Plan Settings &gt; Major Loss</strong>, starting at the age you choose.</p>
+          <ul>
+            <li>Accounts with "Growth is Fixed" ticked aren't affected. Cash accounts have it ticked by default.</li>
+            <li>Accounts on an entered growth rate and accounts on Portfolio/Holdings are affected differently. The Plan Settings &gt; Major Loss guide explains how.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-monte-carlo": {
+    name: "Monte Carlo",
+    route: "insights/monte-carlo",
+    titleOnly: true,
+    headingButton: true,
+    lessons: [...INSIGHT_LESSONS, "monte-carlo"],
+    tabs: {
+      basics: {
+        description: `
+          <p>A normal projection assumes your investments grow at a steady rate every year. Real markets don't: some years are good, some bad, and the order they come in matters, especially once you're drawing money out.</p>
+          <p>Monte Carlo analysis <strong>tests your plan against that uncertainty</strong>. It runs the plan many times (each run is an "iteration"), each with a different random sequence of investment returns based on the expected return and volatility of each asset class in your plan's market assumptions. It then shows the share of runs in which your goals are met, as a probability of success, and the range of outcomes on the chart.</p>
+          <ul>
+            <li>Only accounts that grow by Portfolio/Holdings are randomised. Check "Account(s) Affected" first. With none, the result has no meaning.</li>
+            <li>More iterations give a steadier result. Shackademy suggests 1,000 for any result you plan to rely on.</li>
+            <li>The overall figure counts a run as a success only if every goal is met. Check the per-goal results too.</li>
+            <li>The "Accounts Using Asset Allocation" window can switch every account to asset allocation at once, and this locks each account's growth choice. To undo it, open the window and set the toggles back to No.</li>
+            <li>Reports only include Monte Carlo results that you've saved with Save Results.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-performance": {
+    name: "Performance",
+    route: "insights/performance",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Performance moves <strong>the growth rates of all your accounts up or down</strong> with the slider, so you can see whether your goals are still met. The Results table shows each account's original and simulated rate, and the chart shows the outcome.</p>
+        `,
+      },
+    },
+  },
+
+  "insight-iht": {
+    name: "Potential IHT",
+    route: "insights/iht",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Potential IHT shows <strong>estimated inheritance tax over the life of the plan</strong>. Choose a Comparison Plan to compare it with a What If.</p>
+          <ul>
+            <li>Use Table View &gt; Details to see the figures for a particular year.</li>
+            <li>Voyant applies announced changes to inheritance tax rules in the years they take effect, so the estimate can change sharply in those years. Check the current rules on GOV.UK.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "insight-retirement-spending": {
+    name: "Retirement Spending",
+    route: "insights/retirement-spending",
+    titleOnly: true,
+    headingButton: true,
+    lessons: INSIGHT_LESSONS,
+    tabs: {
+      basics: {
+        description: `
+          <p>Retirement Spending works out <strong>the level of yearly spending, rising with inflation, the plan could support</strong> from the Retirement Event. If you've already retired, it works from the start of the plan.</p>
+          <ul>
+            <li>For the analysis, your other spending goals and expenses are set to end at the Retirement Event, and the result takes their place. The five toggles decide which goals and costs stay in the plan alongside the result. Each toggle has its own Shackademy tooltip.</li>
+            <li>Milestone, gifting and education goals only count here if they're entered as goals, not as expenses.</li>
+            <li>Use Year View &gt; Expenses inside the insight to see exactly which goals and costs were included.</li>
+            <li>The result doesn't change your goals. To use it, adjust your retirement goals yourself, ideally in a What If.</li>
+            <li>The result is a level amount that rises with inflation each year. If you expect your spending to change during retirement, for example more in the early years and less later on, you can use the result as a starting point. Build that shape into your retirement goals, then check the plan still holds up.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  // ============================================================
+  // Other route-detected screens
+  // ============================================================
+
+  "wealth-flow": {
+    name: "Wealth Flow",
+    route: "wealth-flow",
+    titleOnly: true,
+    lessons: ["lets-see"],
+    tabs: {
+      basics: {
+        description: `
+          <p>Wealth Flow shows, for the year selected, <strong>where each income came from and where it went</strong>: spending, tax, saving or debt. It's the best screen for "where did my money go?" questions, for example after a property sale or windfall.</p>
+        `,
+      },
+    },
+  },
+
+  "lets-see": {
+    name: "Let's See",
+    route: "letssee",
+    titleOnly: true,
+    lessons: ["lets-see"],
+    tabs: {
+      basics: {
+        description: `
+          <p>Let's See shows your plan as <strong>one large chart over its whole life</strong>.</p>
+          <ul>
+            <li>Use the drop-down above the chart to switch between views such as Cash Flow, Assets, Expenses, Debts, Net Worth, Plan Worth and Taxes.</li>
+            <li>On Cash Flow, click the legend items (Total Need, Basic Need, All Shortfall, All Inflows) to show or hide each line.</li>
+            <li>Details, Year View and Table View show the figures behind the chart.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "dual-chart": {
+    name: "Dual Chart",
+    route: "dual",
+    titleOnly: true,
+    lessons: ["lets-see"],
+    tabs: {
+      basics: {
+        description: `
+          <p>Dual Chart shows <strong>two charts, one above the other</strong>, so you can look at two views of your plan at once, for example Cash Flow and Assets. Choose each chart's view with its own drop-down.</p>
+        `,
+      },
+    },
+  },
+
+  legacy: {
+    name: "Legacy",
+    route: "overview/legacy",
+    titleOnly: true,
+    tabs: {
+      basics: {
+        description: `
+          <p>Legacy shows <strong>what would pass on, and any inheritance tax</strong>, under three scenarios: the plan as it stands, if one of you died today, and if you both died today. Use it to check your estate plan, life cover held in trust or not, and pensions in the estate.</p>
+          <ul>
+            <li>The "today" figures and the Reports estate figures can differ. Compare like with like.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "plan-differences": {
+    name: "Plan Differences",
+    route: "overview/plan-differences",
+    titleOnly: true,
+    tabs: {
+      basics: {
+        description: `
+          <p>Plan Differences lists <strong>every item that differs between two plans</strong>: added, removed or changed. It's the quickest way to see what a What If changed, or what changed since last year's plan.</p>
+          <ul>
+            <li>Changing Current Plan here also switches the plan you're working in. Check the plan name at the top afterwards.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  "what-if": {
+    name: "What If",
+    route: "what-if",
+    titleOnly: true,
+    lessons: ["what-if"],
+    tabs: {
+      basics: {
+        description: `
+          <p>What Ifs are <strong>separate copies of a plan for testing changes</strong>.</p>
+          <ul>
+            <li>Opening a guided What If creates a new plan straight away, even if you leave without finishing. Delete unwanted ones in Manage Plans.</li>
+            <li>A What If doesn't pick up later changes to the plan it was copied from.</li>
+          </ul>
+        `,
+      },
+    },
+  },
+
+  timeline: {
+    name: "Timeline",
+    route: "timeline",
+    titleOnly: true,
+    lessons: ["people-timeline"],
+    tabs: {
+      basics: {
+        description: `
+          <p>The Timeline shows <strong>every event and stage in your plan</strong>. Click an event to open it.</p>
+          <ul>
+            <li>If it's linked to anything, the top of the event shows "This event affects the timing of ... items". Click <strong>Show Details</strong> to see what.</li>
+            <li>Moving an event moves everything linked to it.</li>
+          </ul>
         `,
       },
     },

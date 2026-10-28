@@ -114,6 +114,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Use a realistic target age rather than an aspirational one - you can always model alternatives later using Voyant's 'What if' tools</li>
         <li>You can adjust retirement timing later using the timeline</li>
+        <li>Employment linked to retirement stops at the start of the tax year in which you reach this age. If you retire part-way through a year, see the 'Retiring part-way through a year' lesson.</li>
       </ul>
     `,
   },
@@ -159,6 +160,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>The default is 'Annual' but you can change this on the right of the input box</li>
         <li>Check 'Expenses' in the 'Year View' to validate this entry</li>
+        <li>Some costs are already included elsewhere in your plan: contributions are set on each savings, investment or pension account, insurance premiums on each policy, and debt repayments on each debt. Check your spending goals don't include these as well, or they'll be counted twice.</li>
       </ul>
     `,
   },
@@ -168,6 +170,24 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
       <h3>What to enter</h3>
       <p>If this expense is tax deductible please ensure this is ticked and the owner is correct</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Ticked, the expense is set against income for tax, split by ownership share. It shows in Year View &gt; Taxes as an income deduction.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "interestTaxDeductible",
+    sections: ["debt"],
+    label: "Interest is Tax Deductible",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Tick this if the interest on this debt can be set against your income for tax, for example on some rental property mortgages.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Check the current rules on GOV.UK, or ask a financial adviser if you have one.</li>
+        <li>After saving, Year View &gt; Taxes shows the effect.</li>
+      </ul>
     `,
   },
   {
@@ -179,7 +199,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>The default inflation rate is found in Dashboard view > Plan Settings > Inflation/Growth > Inflation Rate</li>
-        <li>Changing the default rate will only affect new plans created, you will need to manually change the rate for any existing plans</li>
+        <li>If this item is on the default, changing the rate in Plan Settings changes it here too. Once you enter your own figure here, the item keeps it, even if you later enter the same figure as the default.</li>
       </ul>
     `,
   },
@@ -274,6 +294,7 @@ window.SHACKADEMY_FIELDS = [
     <h3>Tips</h3>
     <ul>
       <li><a href="https://support.planwithvoyant.com/hc/en-us/articles/15113841453083-How-to-set-up-a-Payment-Source-on-a-Expense-UK" target="_blank">Voyant's lesson on using Payment Sources</a></li>
+      <li>With this ticked, Voyant only uses your preferred sources. If they can't cover the whole amount, it uses what they have, and the rest shows as Unfulfilled in Year View &gt; Expenses.</li>
     </ul>
   `,
   },
@@ -327,7 +348,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>The default inflation rate is found in Dashboard view > Plan Settings > Inflation/Growth > Inflation Rate</li>
-        <li>Changing the default rate will only affect new plans created, you will need to manually change the rate for any existing plans</li>
+        <li>If this item is on the default, changing the rate in Plan Settings changes it here too. Once you enter your own figure here, the item keeps it, even if you later enter the same figure as the default.</li>
       </ul>
     `,
   },
@@ -392,7 +413,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>The default inflation rate is found in Dashboard view > Plan Settings > Inflation/Growth > Inflation Rate</li>
-        <li>Changing the default rate will only affect new plans created, you will need to manually change the rate for any existing plans</li>
+        <li>If this item is on the default, changing the rate in Plan Settings changes it here too. Once you enter your own figure here, the item keeps it, even if you later enter the same figure as the default.</li>
       </ul>
     `,
   },
@@ -456,6 +477,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
       <h3>What to enter</h3>
       <p>Select whether the recipient of this gift is a person already included in the plan, a person outside of the plan, or a charity.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Person in plan only appears once the plan has a child, grandchild, parent or other person. Your spouse or partner isn't offered.</li>
+      </ul>
     `,
   },
   {
@@ -483,7 +508,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>The default is 'Annual' but you can change this on the right of the input box</li>
-        <li>For a one-off goal, you can set the timing to start in one year and end in the following, or consider using a 'Milestone' goal</li>
+        <li>For a one-off goal, you can set the timing to start in one year and end in the following, or consider using a 'Milestone' goal. Setting the start and end to the same event also works.</li>
         <li>Check 'Expenses' in the 'Year View' to validate this entry</li>
       </ul>
     `,
@@ -497,7 +522,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>The default inflation rate is found in Dashboard view > Plan Settings > Inflation/Growth > Inflation Rate</li>
-        <li>Changing the default rate will only affect new plans created, you will need to manually change the rate for any existing plans</li>
+        <li>If this item is on the default, changing the rate in Plan Settings changes it here too. Once you enter your own figure here, the item keeps it, even if you later enter the same figure as the default.</li>
       </ul>
     `,
   },
@@ -529,6 +554,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Be specific - e.g. "Jane Retires", "Buy Holiday Home", "Children Leave Home" rather than just "Event 1"</li>
         <li>Events are used to trigger changes in the plan - a well-named event makes it much easier to understand the plan at a glance</li>
+        <li>We suggest only linking items to the same event if they should always move together, and giving things like a property sale, a DB pension start, withdrawals, contribution changes and gifts their own events. That way, changing one doesn't move the others. Before moving an event, open it and check what's linked.</li>
       </ul>
     `,
   },
@@ -567,6 +593,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>The Voyant 'Year' reflects the first of the calendar years in the tax year... e.g. 2034 = the 2034/35 tax year</li>  
         <li>Changing the year will automatically update the Age field based on the selected owner's date of birth</li>
+        <li>The Year box can show the following year when the event first opens. Open the drop-down: the ticked year is the event's actual year, and it matches the Timeline.</li>
       </ul>
     `,
   },
@@ -657,7 +684,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Select the employment type. This determines the tax treatment applied to the earnings and may unlock additional fields.</p>
       <h3>Options</h3>
       <ul>
-        <li><strong>Employed</strong> - standard PAYE employment. Income Tax and National Insurance are deducted via payroll in reality (though paid via Self Assessment in Voyant)</li>
+        <li><strong>Employed</strong> - standard PAYE employment. Voyant shows the tax and National Insurance as paid at source in the same year.</li>
         <li><strong>Self-Employed</strong> - income from self-employment or sole trading. Tax is assessed via Self Assessment and Class 4 NI applies</li>
         <li><strong>Company Owner</strong> - director or shareholder of a company. Unlocks the Dividend field and applies dividend tax treatment to any dividend income entered</li>
       </ul>
@@ -685,7 +712,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Enter an annual average total for any expected bonus or commission income. This is added to salary and taxed as earned income.</p>
       <h3>Tips</h3>
       <ul>
-        <li>If bonuses vary significantly year to year, consider using a conservative average rather than the best year</li>
+        <li>If bonuses vary significantly year to year, a figure based on your best year may overstate future income. An average over several years gives a steadier figure</li>
         <li>If bonuses are likely to stop at a certain point (e.g. when a role changes), you can use Steps to reduce or remove this amount at a future date</li>
       </ul>
     `,
@@ -725,6 +752,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>This is generally relevant for contractors or sole traders who operate through an umbrella company or who have agreed to be taxed at source</li>
         <li>If unsure, leave this off - self-employed income is generally reported via Self Assessment</li>
+        <li>In Voyant this changes when the tax shows, not how much: ticked, it's shown as paid at source in the same year. Unticked, it's charged the following year. Choosing Self Employed is what changes National Insurance.</li>
       </ul>
     `,
   },
@@ -746,11 +774,12 @@ window.SHACKADEMY_FIELDS = [
     label: "Growth Rate",
     helpText: `
       <h3>What to enter</h3>
-      <p>Enter the annual rate at which this employment income is expected to grow. By default this is linked to the inflation figure entered in Plan Settings.</p>
+      <p>Enter the annual rate at which this employment income is expected to grow. By default this follows National Average Earnings in Plan Settings, which is a separate setting from the Inflation Rate.</p>
       <h3>Tips</h3>
       <ul>
         <li>Override this if a specific salary progression is expected at a defined % rate</li>
         <li>You can also use Steps to model discrete salary changes at specific points in time</li>
+        <li>If this item is on the default, changing the rate in Plan Settings changes it here too. Once you enter your own figure here, the item keeps it, even if you later enter the same figure as the default.</li>
       </ul>
     `,
   },
@@ -824,6 +853,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Options</h3>
       <ul>
         <li><strong>Income</strong> - taxed at the owner's marginal income tax rate</li>
+        <li><strong>Property Income</strong> - taxed as property income, using Voyant's property income tax rates</li>
         <li><strong>Capital Gains</strong> - treated as a capital gain and taxed at the applicable CGT rate</li>
         <li><strong>Dividends</strong> - taxed at dividend tax rates, with the annual dividend allowance applied first</li>
       </ul>
@@ -838,7 +868,8 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>If set to Taxable, the tax is not deducted via PAYE - it is assessed via Self Assessment and shown as a tax liability in the Year View</li>
-        <li>If unsure of the tax status, check with a tax adviser before selecting Non-Taxable</li>
+        <li>If unsure of the tax status, check HMRC guidance on GOV.UK, or ask a financial adviser if you have one, before selecting Non-Taxable</li>
+        <li>Tax on this income shows in Year View &gt; Taxes in the following year, as '(name) taxes for year (year)'.</li>
       </ul>
     `,
   },
@@ -859,10 +890,10 @@ window.SHACKADEMY_FIELDS = [
     label: "Growth Rate",
     helpText: `
       <h3>What to enter</h3>
-      <p>Enter the annual rate at which this income is expected to grow. By default this is linked to the inflation figure entered in Plan Settings.</p>
+      <p>Enter the annual rate at which this income is expected to grow. By default this follows National Average Earnings in Plan Settings, which is a separate setting from the Inflation Rate.</p>
       <h3>Tips</h3>
       <ul>
-        <li>Changing the default rate in Plan Settings will only affect new plans created, you will need to manually change the rate for any existing income</li>
+        <li>If this item is on the default, changing the rate in Plan Settings changes it here too. Once you enter your own figure here, the item keeps it, even if you later enter the same figure as the default.</li>
         <li>For income that is expected to remain flat (e.g. a fixed trust distribution), enter 0%</li>
         <li>For rental income, consider using an assumption that reflects realistic long-term rental growth rather than the earnings default</li>
       </ul>
@@ -884,10 +915,10 @@ window.SHACKADEMY_FIELDS = [
     label: "Income Survives Owner",
     helpText: `
       <h3>What to enter</h3>
-      <p>Toggle this on if this income would continue to be received after the owner's death - for example, a trust income that passes to a beneficiary, or a maintenance payment that continues to a surviving partner.</p>
+      <p>Leave this on if this income would continue to be received after the owner's death - for example, a trust income that passes to a beneficiary, or a maintenance payment that continues to a surviving partner.</p>
       <h3>Tips</h3>
       <ul>
-        <li>By default, Voyant stops Other Income at the owner's mortality event - toggle this on if the income genuinely continues</li>
+        <li>This is on by default, so the income carries on after death. Turn it off if the income stops when the owner dies.</li>
         <li>This does not change the owner of the income in the plan - it simply instructs Voyant to keep paying it after the death event</li>
       </ul>
     `,
@@ -946,6 +977,7 @@ window.SHACKADEMY_FIELDS = [
         <li>If the windfall is subject to tax, enter the gross amount and set the Taxation Type and Taxable fields accordingly so Voyant can model the tax correctly</li>
         <li>For an inheritance, enter the net amount expected after IHT and other costs have been settled from the estate</li>
         <li>Be cautious when entering future inheritances or other uncertain windfalls. Consider only including amounts that are reasonably expected to be received</li>
+        <li>The whole amount is paid into the Default Surplus Account (cash) at the end of that year, and stays there unless a Transfer or Sweep moves it. A windfall in the plan's first year drops out at the next plan-year update.</li>
       </ul>
     `,
   },
@@ -959,6 +991,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li><strong>Income</strong> - taxed at the owner's marginal income tax rate</li>
         <li><strong>Capital Gains</strong> - treated as a capital gain and taxed at the applicable CGT rate</li>
+        <li><strong>Dividends</strong> - taxed at dividend tax rates, with the annual dividend allowance applied first</li>
       </ul>
     `,
   },
@@ -1069,8 +1102,10 @@ window.SHACKADEMY_FIELDS = [
       <p>Grow the account by Entered Interest Rate which you enter in the next field or by Portfolio/Holdings which will assume 100% cash growth rates on accounts in this 'Savings' section.</p>
       <h3>Tips</h3>
       <ul>
-        <li>Our suggestion is to use <strong>Entered Interest Rate</strong> for all accounts until you're familiar with the impact of changing to Portfolio/Holdings.</li>
-        <li>This field will be <strong>locked</strong> if you have toggled on 'Grow all savings and cash accounts using 100% cash allocation' within the Monte Carlo insight. To unlock it, navigate to the Monte Carlo analysis insight, click 'X Account(s) Affected' on the right hand side, and switch the toggle at the bottom of the pop up to 'No'</li>
+        <li>Shackademy's suggested approach is to use <strong>Entered Interest Rate</strong>, and to choose a rate you think is realistic for this account. A projection is only as reliable as the growth rates behind it, so you can test higher and lower rates in a What If.</li>
+        <li>Any fees on the account's Fees tab are taken in addition to this growth rate. If the rate you're using already allows for fees, entering them on the Fees tab as well counts them twice.</li>
+        <li>If you switch to Portfolio/Holdings, the allocation starts at 100% cash, and the dataset's expected returns can be much higher than an entered rate.</li>
+        <li>This is <strong>locked</strong> if 'Grow all savings and cash accounts using 100% cash allocation' is switched on, either in Plan Settings &gt; Inflation / Growth or in the Accounts Using Asset Allocation window on the Monte Carlo and Historic insights. Switch it back to No in either place to unlock it.</li>
       </ul>
     `,
   },
@@ -1091,6 +1126,20 @@ window.SHACKADEMY_FIELDS = [
     `,
   },
   {
+    key: "contributionType",
+    sections: ["pension-money-purchase"],
+    label: "Contribution Type",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Select how regular contributions are worked out: Amount, Amount With Inflation, Percent of Income or Maximum Allowed Contribution.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>There's no option for 'whatever I earn above a tax threshold'. An Amount changed from a later year with Steps, or Percent of Income, gets close.</li>
+        <li>Voyant grows a salary each year using the income's growth setting, so a fixed amount won't keep taxable income at the same level in later years. Check Taxable Income in Year View &gt; Taxes &gt; Income and Deductions for each year, and check the current bands on GOV.UK.</li>
+      </ul>
+    `,
+  },
+  {
     key: "contributionAmount",
     label: "Contribution Amount",
     helpText: `
@@ -1108,13 +1157,33 @@ window.SHACKADEMY_FIELDS = [
     `,
   },
   {
+    key: "contributionAmount",
+    sections: ["pension-money-purchase"],
+    label: "Contribution Amount",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Enter the owner's regular contribution into this pension. The pot receives the amount entered.</p>
+      <h3>How it shows in Year View</h3>
+      <ul>
+        <li><strong>Relief at source</strong> (Personal Pension, Group Personal Pension, SIPP or Group SIPP type): Year View &gt; Expenses shows the contribution at its net cost, after basic-rate relief. Any higher-rate relief comes back the following year as 'Tax Credit for year (year)' in Year View &gt; Cash Flow.</li>
+        <li><strong>Net pay</strong> (Occupational Pension or SSAS type), or <strong>salary sacrifice</strong>: Year View &gt; Expenses shows the full amount, and income tax is worked out on the salary minus the contribution.</li>
+      </ul>
+      <h3>Tips</h3>
+      <ul>
+        <li>Default is set to 'Annually' but you can change this on the right hand side of the input box</li>
+        <li>Check the pension's Type matches how the scheme really gives relief. See the Type tooltip.</li>
+      </ul>
+    `,
+  },
+  {
     key: "formContributionPresentFutureValue",
     label: "Contribution Entered As",
     helpText: `
       <h3>Tips</h3>
       <ul>
-        <li><strong>Present Value:</strong> If you want the expense to increase with inflation from <strong>today</strong>, choose this</li>
-        <li><strong>Future Value:</strong> If you want the expense to increase with inflation from <strong>the chosen start date (Timing tab)</strong>, choose this</li>
+        <li><strong>Present Value:</strong> If you want the contribution to increase with inflation from <strong>today</strong>, choose this</li>
+        <li><strong>Future Value:</strong> If you want the contribution to increase with inflation from <strong>the chosen start date (Timing tab)</strong>, choose this</li>
+        <li>This defaults to Future Value.</li>
       </ul>
     `,
   },
@@ -1134,22 +1203,40 @@ window.SHACKADEMY_FIELDS = [
     label: "Withdrawal Type",
     helpText: `
       <h3>What to enter</h3>
-      <p>Withdrawal types allow you to specify the limit up to which withdrawals may be made.
+      <p>Withdrawal types set the limit up to which Voyant may take money from this account when it's needed.
       <br>
       If you would like a set amount to be withdrawn from the account each year, regardless of whether Voyant classes it 'As Needed', set this up in the Planned Withdrawals screen.</p>
       <h3>Options</h3>
       <ul>
-        <li><strong>Do Not Allow</strong> - Selecting 'Do Not Allow' will not allow any withdrawals from this account. The whole value of the growing account will be ringfenced from any spending. This is useful for setting up an Emergency Fund.</li>
-        <li><strong>Scheduled only</strong> - This option is relevant in conjunction with a Planned Withdrawal which has selected this account. This will prevent the account being used in any other way except for the Planned withdrawal.</li>
+        <li><strong>Do Not Allow</strong> - no withdrawals from this account, including Planned Withdrawals. The whole value of the growing account will be ringfenced from any spending. This is useful for setting up an Emergency Fund. To allow planned withdrawals only, use Scheduled Only.</li>
+        <li><strong>Scheduled Only</strong> - This option is relevant in conjunction with a Planned Withdrawal which has selected this account. This will prevent the account being used in any other way except for the Planned Withdrawal.</li>
         <li><strong>Minimum Balance</strong> - Will withdraw from the account, but not let the account go lower than the minimum balance. The Minimum Balance option is a fixed amount which does not inflate. Depending on your growth settings this account will also grow and anything above the minimum balance can be used. Also useful for setting up an Emergency Fund.</li>
         <li><strong>As Needed</strong> - This is the default option and means this account will be accessed when required and as according to the liquidation order (after the Event specified on the Timeline).*</li>
         <li><strong>Percentage</strong> - Limits the withdrawals to a maximum of this percentage out of this account annually if needed.*</li>
-        <li><strong>Fixed with Inflation</strong> - Limits the withdrawals to a maximum of this fixed value if needed in the plan and also inflates the value over time.*</li>
-        <li><strong>Fixed without inflation</strong> - Limits the withdrawals to a maximum of this fixed value if needed in the plan and does not inflate the value over time.*</li>
-        <li><strong>Max without penalty</strong> - For bonds there is an additional option of Maximum withdrawals without penalty. This means it will limits the withdrawals to the 5%/ year for 20 years where available and if needed in the plan. *</li>
-        <li><strong>Max within Basic/Intermediate Tax Band</strong> - For DC pensions, within Planned Withdrawals, you can ask Voyant to drawdown taxable income to use up the owner's basic rate tax band. Refer to the linked lesson in the sidebar for more details.</li>
+        <li><strong>Amount with Inflation</strong> - Limits the withdrawals to a maximum of this amount if needed in the plan, and inflates the amount over time.*</li>
+        <li><strong>Amount</strong> - Limits the withdrawals to a maximum of this amount if needed in the plan. The cap doesn't rise with inflation, even if Present Value is ticked.*</li>
+        <li><strong>Max Without Penalty</strong> - For bonds, limits withdrawals to the amount that can be taken without an immediate tax charge. It isn't available for a Lifetime ISA.*</li>
       </ul>
       <p>*Note: These payments are the maximum amount Voyant is allowed to take from the account. The withdrawals will not be used if, for example, there isn't a shortfall to be met by using savings.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Before the Limit Starts event, Voyant doesn't take anything from this account, including Planned Withdrawals, and doesn't warn you.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "drawdownType",
+    sections: ["planned-withdrawals"],
+    label: "Withdrawal Type",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose how much is withdrawn. The options are None, All Available, Percentage, Amount with Inflation, Amount, Dividend Income, Max Without Penalty, Annual GMIB and Max within Basic/Intermediate Tax Band.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Max within Basic/Intermediate Tax Band only works with the UFPLS Pension Strategy.</li>
+        <li>Anything withdrawn beyond what's needed that year is treated as spent unless surplus saving is switched on in Plan Settings, or a Transfer from All Surplus invests it. In Year View, it shows under Expenses as Surplus Income.</li>
+        <li>The 'Utilising Tax Bands in Retirement' and 'Investing lump sums' lessons are linked in the side panel.</li>
+      </ul>
     `,
   },
 
@@ -1168,6 +1255,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>Ownership defaults to the principal person. Check correct ownership for each product.</li>
+        <li>Clicking a second name adds them as a joint owner. Click a name again to remove it.</li>
       </ul>
     `,
   },
@@ -1196,10 +1284,11 @@ window.SHACKADEMY_FIELDS = [
         <li><strong>Bypass Trust & Loan Trusts</strong> - Trusts do not form part of the liquidation order. Voyant will not take adhoc/as needed withdrawals to fulfil expenses.</li>
         <li><strong>Discounted Gift Trusts (DGT)</strong> - A DGT does not form part of the liquidation order however Voyant will make automatic planned withdrawals from the investment.<sup>1</sup></li>
         <li><strong>Enterprise Investment Schemes (EIS)</strong> - EIS investments do not form part of the liquidation order. Adhoc withdrawals will not be taken from these investments. If withdrawals are needed these will need to be set up as Planned Withdrawals.<sup>2</sup></li>
-        <li><strong>Lifetime ISA</strong> - Treated as a Tax Free asset. Voyant will not access until the owner is over the required age.</li>
+        <li><strong>Lifetime ISA</strong> - Treated as a Tax Free asset. Voyant doesn't add the government bonus, charge the early withdrawal penalty, or stop contributions at the age limit. If any of these matter to your plan, allow for them yourself. Voyant also doesn't count Lifetime ISA contributions towards your overall ISA allowance, so check that your total contributions across all your ISAs stay within the overall limit.</li>
         <li><strong>Onshore bond</strong> - Treated as a Tax Deferred asset. Voyant will treat withdrawals as tax deferred up to the allowance.</li>
         <li><strong>Offshore bond</strong> - Treated as a Tax Deferred asset. Voyant will treat withdrawals as tax deferred up to the allowance.</li>
-        <li><strong>Offshore Taxable</strong> - Treated as a Tax Deferred asset. With this investment you can set the level of taxation as you choose.<sup>3</sup></li>
+        <li><strong>Offshore Taxable</strong> - Treated as a Tax Deferred asset.<sup>3</sup></li>
+        <li><strong>Seed Enterprise Investment Schemes (SEIS)</strong> - SEIS investments do not form part of the liquidation order. Adhoc withdrawals will not be taken from these investments. If withdrawals are needed these will need to be set up as Planned Withdrawals.</li>
         <li><strong>Stocks Market ISA/ Junior ISA</strong> - Treated by Voyant as a Tax Free asset. Voyant will use the appropriate ISA allowance depending on whether an adult or child is selected as the owner.</li>
         <li><strong>Unwrapped investments</strong> - Treated as a Taxable asset. Voyant use unwrapped investments as the catch-all category for all manner of Taxable investments that are not subject to the special tax treatments. OEICs, unit trusts, equity holdings, stocks and shares, individual equities, businesses and even properties can all be modelled under the guise of unwrapped investments.</li>
         <li><strong>Venture Capital Trusts (VCT)</strong> - VCT's do not form part of the liquidation order. Adhoc withdrawals will not be taken from these investments. If withdrawals are needed these will need to be set up as Planned Withdrawals.<sup>4</sup></li>
@@ -1298,16 +1387,8 @@ window.SHACKADEMY_FIELDS = [
     key: "investmentIhtExemptYear",
     label: "Year qualifying for IHT exemption",
     helpText: `
-      <h3>What to enter</h3>  
-      <p><strong>Existing Investments</strong></p>
-      <p>The date in the 'Qualifies for IHT Relief' only applies to existing investments. This field is not relevant to Transfers and New/Regular contributions into a BPR/APR investment.
-      <p>'Year Qualifying for IHT Exemption' this is the date that the relief will be given i.e. after the 2 year qualifying period.</p>
-      <p><strong>New Investments</strong></p>
-      <p>For new, qualifying investments, IHT relief typically occurs 2 years after the transfer or contribution made into the investment.</p>
-      <p>The 'Year Qualifying for IHT Exemption' field can be left blank in this instance and Voyant will determine the year in which IHT relief will apply.</p>
-      <p>If you are entering multiple transfers into a new investment, these may be best entered as separate investments to allow Voyant to start the IHT exemption clock after each investment.</p>
-      <p>Please bear in mind that in Voyant, mortality is assumed to occur at the start of the year, whereas transfers occur at the end of the year.</p>
-      <p>This means that for a qualifying investment set up by a transfer in 2024, IHT relief will apply in Voyant from the end of 2026 (2 years) i.e. showing on Voyant at the start of 2027.</p>
+      <h3>What to enter</h3>
+      <p>Enter the year from which this investment qualifies for relief from inheritance tax, if it does.</p>
     `,
   },
   {
@@ -1326,7 +1407,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Enter the number of segments currently in force or, if it is a new purchase, to be purchased.</p>
       <h3>Tips</h3>
       <ul>
-        <li>The system will always default to 1 segment. If you are unsure of the number of segments within the Bond we would suggest that you enter 100 segments as a starting point, and follow up with your provider.</li>
+        <li>This defaults to 1 segment. Bonds are often set up with many segments, so check the number with your provider. Shackademy's suggested approach, while you wait for that, is to enter 100 segments as a starting point.</li>
       </ul>
     `,
   },
@@ -1426,8 +1507,8 @@ window.SHACKADEMY_FIELDS = [
       <p>Toggle this on if this EIS or SEIS investment is also listed on the Alternative Investment Market (AIM).</p>
       <h3>Tips</h3>
       <ul>
-        <li>From April 2026, AIM-listed investments are subject to a reduced rate of IHT relief under BPR - check current HMRC guidance for the applicable rate. Voyant uses this toggle to apply the correct relief level</li>
-        <li>Non-AIM EIS and SEIS investments are not affected by this change and continue to qualify for full BPR relief (subject to the two-year holding period)</li>
+        <li>This defaults to Yes for EIS and SEIS. Set it to match how the investment is actually held.</li>
+        <li>For how it affects inheritance tax, see GOV.UK, or ask a financial adviser if you have one.</li>
       </ul>
     `,
   },
@@ -1440,7 +1521,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This relief typically applies to disposals of shares in personal trading companies, business assets, or qualifying partnership interests - not to passive investment portfolios</li>
-        <li>Confirm eligibility with your tax adviser before toggling this on</li>
+        <li>Check HMRC guidance on GOV.UK, or a financial adviser if you have one, before toggling this on</li>
       </ul>
     `,
   },
@@ -1449,11 +1530,10 @@ window.SHACKADEMY_FIELDS = [
     label: "Withdrawal Strategy",
     helpText: `
       <h3>What to enter</h3>
-      <p>Select how withdrawals should be taken from this investment bond - either by <strong>encashing segments</strong> or by taking a <strong>partial withdrawal</strong> across all segments.</p>
-      <h3>Options</h3>
+      <p>Choose how withdrawals are taken from this bond. The options are <strong>Attempt to Optimize</strong> (the default), <strong>Always Encash Segments</strong> and <strong>Always Incur Excess Withdrawal</strong>.</p>
+      <h3>Tips</h3>
       <ul>
-        <li><strong>Segment Encashment</strong> - whole segments are surrendered. Each segment has its own 5% per annum tax-deferred allowance and its own gain calculation</li>
-        <li><strong>Partial Withdrawal</strong> - withdrawals are taken from across all segments proportionally. This draws down the tax-deferred 5% allowance across the whole policy simultaneously</li>
+        <li>Check Year View &gt; Taxes to see the effect.</li>
       </ul>
     `,
   },
@@ -1475,22 +1555,23 @@ window.SHACKADEMY_FIELDS = [
     key: "specialContributionType",
     label: "Contribution Type",
     helpText: `
-    <h3>What to enter</h3>
-    <p>This section is allowing you to tell Voyant that your ISA would qualify to receive the inherited ISA allowance from your spouse if they passed away.</p>
-    <p>In the event of death, Voyant will follow the inputs here when allocating funds from your spouse's ISA (if relevant).</p>
-    <p>You can choose to either contribute a percentage of the allowance, or a set amount.</p>
-    <h3>Tips</h3>
-    <ul>
-      <li>For example, considering the following inputs:
+      <h3>What to enter</h3>
+      <p>This section tells Voyant whether this ISA should receive the inherited ISA allowance if your spouse or partner dies.</p>
+      <h3>Tips</h3>
+      <p>If this is left at 0%, your partner's ISA is paid into cash when they die.</p>
+      <p><strong>Voyant's own guidance</strong> is to leave this at 0% and use a Transfer instead. On the surviving partner's ISA, add a Transfer:</p>
       <ul>
-        <li>If you leave the contribution type as 'Percentage'</li>
-        <li>Nominate 100% as the percentage in the next field</li>
-        <li>List the number of years as '1'</li>
+        <li><strong>From:</strong> the surviving partner's cash (Default Surplus Account)</li>
+        <li><strong>Transferring:</strong> All Available</li>
+        <li><strong>Timing:</strong> the first death's Mortality event</li>
+        <li><strong>Transfer Before Paying Expenses:</strong> ticked</li>
       </ul>
-      <li>In that case, in the event of your spouse's death, their ISA would be encashed and <strong>100%</strong> of the proceeds would be contributed to this ISA over the course of <strong>1 year</strong>, by default.</li>
-      <li>If you leave this as £0/0% then by default the ISA proceeds will be paid to cash upon your spouse's death.</li>
-    </ul>
-  `,
+      <p>Before you start:</p>
+      <ul>
+        <li>The surviving partner must already have an ISA in the plan.</li>
+        <li>Set this up on both partners' ISAs, because either could die first.</li>
+      </ul>
+    `,
   },
   {
     key: "percentOfSpecialAllowanceContribution",
@@ -1498,6 +1579,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
     <h3>What to enter</h3>
     <p>Enter the percentage of your spouse's ISA that should be contributed to this ISA by default upon their death</p>
+    <h3>Tips</h3>
+    <ul>
+      <li>Voyant's own guidance is to leave the inherited ISA allowance at 0% and use a Transfer instead. The Contribution Type tooltip explains how.</li>
+    </ul>
   `,
   },
   {
@@ -1506,6 +1591,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
     <h3>What to enter</h3>
     <p>Enter a specific amount of your spouse's ISA that should be contributed to this ISA by default upon their death</p>
+    <h3>Tips</h3>
+    <ul>
+      <li>Voyant's own guidance is to leave the inherited ISA allowance at 0% and use a Transfer instead. The Contribution Type tooltip explains how.</li>
+    </ul>
   `,
   },
   {
@@ -1517,6 +1606,7 @@ window.SHACKADEMY_FIELDS = [
     <h3>Tips</h3>
     <ul>
       <li>Ensure this is in line with <a href="https://www.gov.uk/individual-savings-accounts/inheriting-an-isa-from-your-spouse-civil-partner" target="_blank">HMRC guidance</a></li>
+      <li>Voyant's own guidance is to leave the inherited ISA allowance at 0% and use a Transfer instead. The Contribution Type tooltip explains how.</li>
     </ul>
   `,
   },
@@ -1531,8 +1621,22 @@ window.SHACKADEMY_FIELDS = [
       <p>Grow the account by either entered values below or by Portfolio/Holdings which you can complete via the Tabs above.</p>
       <h3>Tips</h3>
       <ul>
-        <li>Our suggestion is to use <strong>Entered Growth Rate</strong> for all accounts until you're familiar with the impact of changing to Portfolio/Holdings.</li>
-        <li>This field will be <strong>locked</strong> if you have toggled on 'Grow all investment and retirement accounts using asset allocation' within the Monte Carlo insight. To unlock it, navigate to the Monte Carlo analysis insight, click 'X Account(s) Affected' on the right hand side, and switch the toggle at the bottom of the pop up to 'No'</li>
+        <li>Shackademy's suggested approach is to use <strong>Entered Growth Rate</strong>, and to choose a rate you think is realistic for this account. A projection is only as reliable as the growth rates behind it, so you can test higher and lower rates in a What If.</li>
+        <li>Any fees on the account's Fees tab are taken in addition to this growth rate. If the rate you're using already allows for fees, entering them on the Fees tab as well counts them twice.</li>
+        <li>If you switch to Portfolio/Holdings, the allocation starts at 100% cash, and the dataset's expected returns can be much higher than an entered rate.</li>
+        <li>This is <strong>locked</strong> if 'Grow all investment and retirement accounts using asset allocation' is switched on, either in Plan Settings &gt; Inflation / Growth or in the Accounts Using Asset Allocation window on the Monte Carlo and Historic insights. Switch it back to No in either place to unlock it.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "dontVaryFixedGrowthWithMarket",
+    label: "Growth is Fixed",
+    helpText: `
+      <h3>What this does</h3>
+      <p>When ticked, this account keeps its normal growth in market simulations (Monte Carlo, Historic, Market Crash and Major Loss events) and isn't affected by them.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>It's ticked by default on cash accounts and unticked on investments.</li>
       </ul>
     `,
   },
@@ -1624,7 +1728,7 @@ window.SHACKADEMY_FIELDS = [
 
       <h3>Options</h3>
       <ul>
-        <li><strong>Restricted Stock Unit:</strong> shares that vest over time. There is normally no exercise price.</li>
+        <li><strong>Restricted Stock Unit:</strong> shares that vest over time. There is normally no exercise price. The value at vesting shows as employment income, taxed through PAYE on the linked salary.</li>
         <li><strong>Company Share Option:</strong> an option to buy shares at a specified exercise price.</li>
         <li><strong>Enterprise Management Incentive (EMI):</strong> a UK tax-advantaged share option scheme, subject to qualifying conditions.</li>
         <li><strong>Non Tax Advantage Share Option:</strong> a share option without the EMI-style tax advantages.</li>
@@ -1783,8 +1887,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>This should broadly align with how you use growth assumptions elsewhere in the plan.</li>
         <li>If using an entered growth rate, complete the Stock Growth Rate field.</li>
-        <li>Our suggestion is to use an entered growth rate as a starting point.</li>
-        <li>For employer shares, be careful about using overly optimistic assumptions.</li>
+        <li>By default this uses the investment growth rate from Plan Settings, which is then applied to a single company's shares. How much growth to assume is your choice.</li>
       </ul>
     `,
   },
@@ -1798,7 +1901,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This assumption affects the projected value of vested, exercised, and future shares.</li>
-        <li>A cautious assumption may be more useful for planning than a best-case estimate.</li>
+        <li>By default this uses the investment growth rate from Plan Settings, which is then applied to a single company's shares. How much growth to assume is your choice.</li>
         <li>You can test more optimistic or pessimistic assumptions using What If scenarios.</li>
       </ul>
     `,
@@ -1952,6 +2055,7 @@ window.SHACKADEMY_FIELDS = [
         <li>Use this to model whether shares are retained or sold over time.</li>
         <li>If shares are retained, the plan may become more exposed to the employer share price.</li>
         <li>Check Year View to confirm sales are appearing as expected.</li>
+        <li>The default, None, keeps vested shares invested for the whole plan.</li>
       </ul>
     `,
   },
@@ -2019,14 +2123,13 @@ window.SHACKADEMY_FIELDS = [
     label: "Asset Type",
     helpText: `
       <h3>What to enter</h3>
-      <p>Select the category that best describes this property.</p>
+      <p>Choose the type that best describes this asset.</p>
       <h3>Options</h3>
       <ul>
-        <li><strong>Main Residence</strong> - your primary home</li>
-        <li><strong>Buy to Let</strong> - a residential property held as an investment. Voyant treats rental income as taxable and gains on disposal are subject to CGT at the residential property rate</li>
-        <li><strong>Second Home / Holiday Home</strong> - a secondary property that is not your main residence. Voyant treats this as subject to CGT on disposal</li>
-        <li><strong>Commercial Property</strong> - a non-residential property. Voyant treats this as subject to CGT at the standard (non-residential) rate on disposal</li>
-        <li><strong>Land</strong> - undeveloped or agricultural land. Voyant treats this as subject to CGT on disposal; APR may apply if farmed</li>
+        <li><strong>Main Residence:</strong> your home. Treated as your home for Capital Gains Tax.</li>
+        <li><strong>Rental Property, Holiday Home:</strong> other property. Treated as chargeable to Capital Gains Tax when sold.</li>
+        <li><strong>Business Property, Farm:</strong> these add fields for business and agricultural reliefs.</li>
+        <li><strong>Vehicle, Boat, Jewellery, Collectibles, Recreation Vehicle, Other:</strong> other physical assets.</li>
       </ul>
     `,
   },
@@ -2039,7 +2142,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>If the property is jointly owned, select all relevant owners - Voyant will split income and gains proportionally</li>
-        <li>Ownership defaults to the principal person - check this is correct before saving</li>
+        <li>In a couple, the Owner field defaults to both of you. Change it if the property is in one name.</li>
       </ul>
     `,
   },
@@ -2061,12 +2164,7 @@ window.SHACKADEMY_FIELDS = [
     label: "Ownership Type",
     helpText: `
       <h3>What to enter</h3>
-      <p>Select how this property is legally owned between the named owners.</p>
-      <h3>Options</h3>
-      <ul>
-        <li><strong>Joint Tenants</strong> - both owners hold the property equally and it passes automatically to the surviving owner on death, regardless of the will</li>
-        <li><strong>Tenants in Common</strong> - each owner holds a defined share which can be left to beneficiaries via their will. Shares do not have to be equal</li>
-      </ul>
+      <p>Select how this property is legally owned between the named owners: Joint Tenancy or Tenants in Common. Voyant doesn't ask for ownership shares.</p>
       <h3>Tips</h3>
       <ul>
         <li>Confirm the ownership structure with the title deeds or Land Registry if unsure</li>
@@ -2094,8 +2192,9 @@ window.SHACKADEMY_FIELDS = [
       <p>Enter the price originally paid for this property. Voyant uses this to calculate the capital gain on disposal for CGT purposes.</p>
       <h3>Tips</h3>
       <ul>
-        <li>If you've made capital improvements (e.g. extensions, renovations), you may be able to add these costs to the base cost - check with a tax adviser</li>
-        <li>For a property received as a gift or inheritance, the base cost is typically the market value at the date of acquisition - confirm with a tax adviser</li>
+        <li>If you've made capital improvements (e.g. extensions, renovations), you may be able to add these costs to the base cost - check your records, or ask a financial adviser if you have one</li>
+        <li>For a property received as a gift or inheritance, the base cost is typically the market value at the date of acquisition - check your records, or ask a financial adviser if you have one</li>
+        <li>This is blank by default. If you leave it blank, the whole sale price is treated as a gain.</li>
       </ul>
     `,
   },
@@ -2108,6 +2207,8 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>When set to Yes, Voyant will treat the property as not yet owned and will model the purchase cost as an outgoing at the date specified in the Timing tab</li>
+        <li>Switching this to Yes doesn't set the Buy Event. It stays at Plan Start until you change it on the Timing tab.</li>
+        <li>Stamp Duty and buying costs aren't included, so add them as a goal at the purchase event, or include them in the price.</li>
       </ul>
     `,
   },
@@ -2122,6 +2223,7 @@ window.SHACKADEMY_FIELDS = [
         <li>The inflation rate affects the property value before purchase i.e. the growth in the purchase price. The growth rate (below) affects the property value post purchase.</li>
         <li>Use a rate that reflects realistic long-term expectations for this type of property and location - past house price growth is not guaranteed to continue</li>
         <li>You can model different rates for different properties - for example, a different rate for a rural holiday home versus a city-centre flat</li>
+        <li>For a future purchase, the price rises at this rate until the Buy Event.</li>
       </ul>
     `,
   },
@@ -2159,11 +2261,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
       <h3>What to enter</h3>
       <p>Toggle this on if this property qualifies for the Residence Nil-Rate Band (RNRB) - the additional IHT allowance available when a main residence is passed to direct descendants.</p>
-      <h3>Based on current rules</h3>
+      <h3>Tips</h3>
       <ul>
-        <li>To qualify, the property must have been the deceased's main home at some point and must be inherited by direct descendants (children, grandchildren, stepchildren etc.)</li>
-        <li>The RNRB is tapered for large estates - Voyant will apply the taper automatically based on the total estate value</li>
-        <li>Only toggle this on for the main residence - it cannot apply to buy-to-let or investment properties</li>
+        <li>This is unticked by default, including on a home added by the Buy a Home What If. Tick it on each main residence it applies to.</li>
+        <li>For the current rules, see <a href="https://www.gov.uk/inheritance-tax" target="_blank">GOV.UK</a>, or ask a financial adviser if you have one.</li>
       </ul>
     `,
   },
@@ -2205,13 +2306,20 @@ window.SHACKADEMY_FIELDS = [
     label: "Type",
     helpText: `
       <h3>What to enter</h3>
-      <p>Select the type of Money Purchase pension.</p>
+      <p>Select the type of Money Purchase pension. The type decides how Voyant gives tax relief on the owner's contributions.</p>
+      <h3>How Voyant treats each type</h3>
+      <ul>
+        <li><strong>Personal Pension, Group Personal Pension, Self Invested Personal Pension, Group SIPP:</strong> relief at source. The pot receives the amount entered, Year View &gt; Expenses shows its net cost, and income tax is worked out on the full salary. Any higher-rate relief comes back the following year as 'Tax Credit for year (year)' in Year View &gt; Cash Flow.</li>
+        <li><strong>Occupational Pension, SSAS:</strong> net pay. The pot receives the amount entered with no top-up, Year View &gt; Expenses shows the full amount, and income tax is worked out on the salary minus the contribution. It shows under Income Deductions in Year View &gt; Taxes.</li>
+        <li><strong>Does Salary Sacrifice apply? set to Yes</strong> overrides the type: income tax and National Insurance are both worked out on the salary minus the contribution.</li>
+      </ul>
       <h3>Tips</h3>
       <ul>
-        <li>The type is used largely for informational purposes only.</li>
-        <li>The type of money purchase does not appear in reports or on the Let's See charts or general overviews.</li>
-        <li>There is a difference, however, between personal pensions (PPP/GPP/SIPP) and occupational schemes (COMP/CIMP schemes, grouped together under the moniker 'Occupational Pension', and Small Self-Administered Schemes), in terms of how tax relief is granted.</li>
-        <li>See <a href="https://support.planwithvoyant.com/hc/en-us/articles/360054226432-Contributions-Tax-relief-on-contributions-to-Money-Purchase-Pensions-UK" target="_blank">this article on tax relief on contributions to money purchase pensions</a> for further information.</li>
+        <li>Which method a scheme uses is a question for the employer or the scheme. Choose the type that matches how the scheme really gives relief.</li>
+        <li>Voyant treats SSAS as net pay. A real SSAS can give relief at source instead, so check with the scheme administrator. A personal pension type is how Voyant models relief at source.</li>
+        <li>Apart from tax relief, the type doesn't appear in reports or on the Let's See charts.</li>
+        <li>Check the result in Year View &gt; Expenses and Year View &gt; Taxes for the year in question.</li>
+        <li>See <a href="https://support.planwithvoyant.com/hc/en-us/articles/360054226432-Contributions-Tax-relief-on-contributions-to-Money-Purchase-Pensions-UK" target="_blank">Voyant's article on tax relief on contributions to money purchase pensions</a>.</li>
         <li>James explains the difference between 'net pay' and 'relief at source' pensions in <a href="https://shackademy.com/path-player?courseid=module-2&unit=6822ca51fae53e450e01914dUnit" target="_blank">this lesson.</a></li>
       </ul>
     `,
@@ -2246,7 +2354,7 @@ window.SHACKADEMY_FIELDS = [
     label: "Employer Contribution Type",
     helpText: `
       <h3>What to enter</h3>
-      <p>Our suggestion is to use 'Fixed' and enter the gross amount rather than 'Matching'</p>
+      <p>Shackademy's suggested approach is to use 'Fixed' and enter the employer's contribution as a gross amount, rather than 'Matching'.</p>
     `,
   },
   {
@@ -2301,11 +2409,11 @@ window.SHACKADEMY_FIELDS = [
     key: "limitContributionsToAllowance",
     label: "Limit Contributions to Allowance",
     helpText: `
-      <h3>What to enter</h3>
-      <p>Toggle this on if you want Voyant to automatically cap total pension contributions at the Annual Allowance for each tax year.</p>
+      <h3>What this does</h3>
+      <p>This is on by default, so Voyant caps contributions at the annual allowance.</p>
       <h3>Tips</h3>
       <ul>
-        <li>The standard Annual Allowance may be reduced to the Money Purchase Annual Allowance (MPAA) if you have flexibly accessed a pension</li>
+        <li>Voyant doesn't reduce the allowance after a pension has been flexibly accessed. If that applies to you, limit the contributions yourself, for example with a Step at that event.</li>
         <li>If you are deliberately modelling a scenario where contributions exceed the allowance (e.g. to show a tax charge), toggle this off</li>
       </ul>
     `,
@@ -2352,11 +2460,13 @@ window.SHACKADEMY_FIELDS = [
     label: "Does Salary Sacrifice apply?",
     helpText: `
       <h3>What to enter</h3>
-      <p>Toggle this on if your pension contributions are made via a salary sacrifice arrangement rather than net pay or relief at source.</p>
+      <p>Toggle this on if the owner's contributions are made by salary sacrifice.</p>
       <h3>Tips</h3>
       <ul>
-        <li>Voyant will adjust the income and tax calculations accordingly when this is toggled on</li>
+        <li>In Voyant, Yes overrides the pension's Type: income tax and the employee's National Insurance are both worked out on the salary minus the contribution. The contribution shows under Income Deductions in Year View &gt; Taxes, with no Tax Credit.</li>
+        <li>The Employer NI rebate (% of NI reduction) share of the employer's NI saving is added to the pension.</li>
         <li>Salary sacrifice is not available for all pension types - check with your employer or scheme provider if unsure</li>
+        <li>Check the result in Year View &gt; Expenses and Year View &gt; Taxes for the year in question.</li>
       </ul>
     `,
   },
@@ -2379,21 +2489,15 @@ window.SHACKADEMY_FIELDS = [
     label: "Pension Strategy",
     helpText: `
       <h3>What to enter</h3>
-      <p>Two options are available to set how incomes will be taken from money purchases. These are UFPLS and Flexi (Flexible Access Drawdown) and they determine whether an element of taxable income will be included in each withdrawal or if withdrawals are to be taken entirely from the pension owner’s tax-free cash allowance if available.
-      <br><br>
-      <strong>Flexible Access Drawdown</strong> = Allows scheduled withdrawals from money purchase pensions to be taken from the owner's tax-free cash allowance first. The total withdrawal amount specified will be tax free assuming enough tax free cash remains in the pension. With each amount withdrawn tax free, an additional 75% is crystallised and moved into a linked drawdown account, which Voyant creates automatically.
-      <br><br>
-      <strong>Please Note</strong> - The Flexible Access Drawdown option can only work if the amount you are withdrawing is less than the pension’s overall tax-free cash allowance, which is normally 25% of the pension’s balance.
-      <br>
-      For example, if you were to schedule a withdrawal of <strong>50% of a pension’s total balance</strong>, Voyant will withdraw this amount. It will not limit withdrawals to only the tax-free allowance.
-      <br>
-      You will receive a combination of taxable and tax-free cash, and in this example you would receive the full amount of tax free cash available (25%) with another 25% paid as a taxable amount.
-      <br><br>
-      <strong>UFPLS</strong> = Withdrawals the amount as 25% tax free and 75% potentially taxable. This is also Voyant’s default for 'as needed' withdrawals taken from money purchase pensions.
-      <br><br>
-      <strong>Please Note:</strong> The above examples do not account for any protected tax free cash you may have, in these instances the amount of tax free cash may be higher than the figures stated above.</p>      
-      <br><br>
-      <strong>Note:</strong> The Pension Strategy window will not appear if only drawdown accounts are selected as there is no tax free element to them so all of the withdrawal is potentially taxable.</p>
+      <p>Choose how withdrawals from a money purchase pension are taken.</p>
+      <ul>
+        <li><strong>Flexible Access Drawdown</strong> (the default) takes each withdrawal as tax-free cash first, while enough remains, and moves the rest of what's crystallised into the linked drawdown pot.</li>
+        <li><strong>UFPLS</strong> takes each withdrawal as part tax-free and part taxable. UFPLS is also how Voyant takes as-needed withdrawals.</li>
+      </ul>
+      <h3>Tips</h3>
+      <ul>
+        <li>The field doesn't appear if only drawdown pots are selected.</li>
+      </ul>
     `,
   },
 
@@ -2412,6 +2516,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>James covers the difference between the two in <a href="https://shackademy.com/path-player?courseid=module-2&unit=6823c15306c62685ba04c70dUnit" target="_blank">this lesson.</a></li>
+        <li>Beneficiary percentages default to 0%. Set them to match your nomination with the provider.</li>
       </ul>
     `,
   },
@@ -2483,7 +2588,7 @@ window.SHACKADEMY_FIELDS = [
       <p>When converting the pension to an annuity, what percentage is to be paid out as TFC before the annuity starts</p>
       <h3>Tips</h3>
       <ul>
-        <li>This is typically 25% but you should confirm with your adviser or pension provider</li>
+        <li>Confirm the percentage with your pension provider, or a financial adviser if you have one</li>
       </ul>
     `,
   },
@@ -2660,7 +2765,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li><strong>None</strong> - benefits are frozen with no revaluation</li>
         <li><strong>RPI</strong> - benefits increase in line with the Retail Prices Index, using the rate set in your Plan Settings</li>
-        <li><strong>LPI</strong> - benefits increase in line with Limited Price Indexation (typically capped at 5% or 2.5%)</li>
+        <li><strong>LPI</strong> - benefits increase in line with Limited Price Indexation. Check your scheme for the cap.</li>
         <li><strong>CPI</strong> - benefits increase in line with the Consumer Prices Index, using the rate set in your Plan Settings</li>
         <li><strong>Other</strong> - enter a custom rate</li>
       </ul>
@@ -2668,6 +2773,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Check your scheme booklet or annual benefit statement for the revaluation basis that applies to your scheme</li>
         <li>Your RPI/CPI assumption can be found in Dashboard > Plan Settings > Inflation/Growth</li>
+        <li>Both escalation types default to None, so a pension left on None doesn't increase at all, before or after it starts. Check your scheme's terms.</li>
       </ul>
     `,
   },
@@ -2689,6 +2795,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Your scheme rules will specify the escalation basis - check your annual benefit statement or member booklet</li>
         <li>Your RPI/CPI assumption can be found in Dashboard > Plan Settings > Inflation/Growth</li>
+        <li>Both escalation types default to None, so a pension left on None doesn't increase at all, before or after it starts. Check your scheme's terms.</li>
       </ul>
     `,
   },
@@ -2715,8 +2822,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>For example, a 1/60th accrual rate means you earn 1/60th of your final salary as pension for every year worked</li>
-        <li>Common rates include 1/60th, 1/80th, and 1/49th (CARE)</li>
-        <li>If your rate is not listed, select 'Other' and enter it manually</li>
+        <li>Choose your scheme's accrual rate from the list, or Other if it isn't listed. It defaults to None.</li>
         <li>You'll find your accrual rate in your scheme booklet or annual benefit statement</li>
       </ul>
     `,
@@ -2791,7 +2897,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>If you take benefits before this age, Voyant will apply the Actuarial Reduction Rate you enter below</li>
         <li>For example: if the Normal Retirement Age is 65 but you retire at 60, an early retirement reduction will be applied</li>
-        <li>Public sector schemes typically have a Normal Retirement Age of 65 or 67 - check your scheme booklet</li>
+        <li>Voyant pre-fills this with a default that may not match your scheme. Enter the age from your scheme booklet or statement.</li>
       </ul>
     `,
   },
@@ -2803,7 +2909,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Enter the percentage reduction applied to your pension for each year you take benefits before the Normal Retirement Age.</p>
       <h3>Tips</h3>
       <ul>
-        <li>For example, a 5% per year reduction taken 3 years early would reduce your pension by 15%</li>
+        <li>Your scheme booklet or statement gives this figure.</li>
         <li>Your scheme will publish its early retirement factors - these are usually in your scheme booklet or on the scheme's website</li>
         <li>If you plan to take benefits at or after the Normal Retirement Age, this field will have no effect</li>
       </ul>
@@ -2839,6 +2945,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Many older final salary schemes (e.g. 1/80th) include a separate automatic lump sum - check whether yours does before selecting Commutation</li>
         <li>CARE and newer public sector schemes typically do not include an automatic lump sum - commutation is a common option for these, but check with your provider</li>
+        <li>Declared and Accrual lump sums don't reduce the pension. Commutation and Maximum reduce it using the commutation rate. A lump sum not spent that year goes into cash.</li>
       </ul>
     `,
   },
@@ -2875,7 +2982,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>The commutation factor represents how much lump sum you receive for every £1 of annual pension you give up</li>
-        <li>For example, a factor of 12 means giving up £1,000 of annual pension produces a lump sum of £12,000</li>
+        <li>Your scheme booklet or statement gives this figure.</li>
         <li>Your scheme will publish its commutation factors - these are usually available from the scheme administrator or in a retirement quote</li>
       </ul>
     `,
@@ -2959,6 +3066,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Not all schemes provide a survivor's benefit during deferment - check your scheme rules</li>
         <li>If the pension is Active or In Payment, this setting is less relevant as other survivorship options will apply</li>
+        <li>With nothing ticked, nothing is paid to a survivor if death happens before the pension starts.</li>
       </ul>
     `,
   },
@@ -3271,7 +3379,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li><strong>None</strong> - the annuity is level; the income does not increase</li>
         <li><strong>RPI</strong> - increases in line with the Retail Prices Index each year, using the rate set in your Plan Settings</li>
-        <li><strong>LPI</strong> - increases in line with Limited Price Indexation, typically capped at 5% or 2.5%</li>
+        <li><strong>LPI</strong> - increases in line with Limited Price Indexation. Check your policy for the cap.</li>
         <li><strong>CPI</strong> - increases in line with the Consumer Prices Index, using the rate set in your Plan Settings</li>
         <li><strong>Other</strong> - enter a fixed escalation rate of your choice</li>
       </ul>
@@ -3330,7 +3438,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>For example, entering 5% on a £200,000 purchase fund produces an annual income of £10,000</li>
         <li>Use a rate from a recent annuity quote or comparison tool - rates vary by age, health, escalation, and payout type</li>
-        <li>Remember that actual rates at the time of purchase may differ from today's rates - consider using a slightly conservative figure</li>
+        <li>Actual rates at the time of purchase may differ from today's rates</li>
       </ul>
     `,
   },
@@ -3354,11 +3462,12 @@ window.SHACKADEMY_FIELDS = [
     label: "Type",
     helpText: `
       <h3>What to enter</h3>
-      <p>Select whether this is an existing drawdown pension or an inherited drawdown pension.</p>
+      <p>Select the type of drawdown pension.</p>
       <h3>Options</h3>
       <ul>
-        <li><strong>Existing Drawdown</strong> - a pension that has already been crystallised (moved into drawdown). This is where you enter a pot that is already in drawdown at the plan start date</li>
-        <li><strong>Inherited Drawdown</strong> - a drawdown pot inherited from a deceased pension holder. Inherited drawdown pots have different rules around income tax and withdrawal flexibility depending on the age at death of the original holder</li>
+        <li><strong>Existing Drawdown Pension</strong> - a pension that has already been crystallised (moved into drawdown) at the plan start date</li>
+        <li><strong>Inherited Pension</strong> - a pension already inherited from someone who has died</li>
+        <li><strong>Future Inherited Pension</strong> - a pension expected to be inherited during the plan</li>
       </ul>
       <h3>Tips</h3>
       <ul>
@@ -3419,7 +3528,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>Drawdown pots are typically Taxable - only change this if you have confirmed the tax-free status applies</li>
-        <li>For inherited drawdown, whether it is taxable depends on the age at death of the original holder - confirm with the scheme or a tax adviser if unsure</li>
+        <li>For inherited drawdown, whether it is taxable depends on the age at death of the original holder - confirm with the scheme, or a financial adviser if you have one, if unsure</li>
       </ul>
     `,
   },
@@ -3446,8 +3555,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Select <strong>Yes</strong> if the State Pension is already in payment at the plan start date. Select <strong>No</strong> if it has not yet started.</p>
       <h3>Tips</h3>
       <ul>
-        <li>If Yes, enter the current annual amount in the Amount field below</li>
-        <li>If No, enter the projected amount (from the owner's State Pension forecast) and set the Start Age</li>
+        <li>Start Age decides when payments begin, whichever you choose. If the State Pension is already being paid, check Start Age is no later than the owner's current age.</li>
       </ul>
     `,
   },
@@ -3462,6 +3570,7 @@ window.SHACKADEMY_FIELDS = [
         <li>Deferring the State Pension increases the weekly amount received</li>
         <li>Check the government's personal forecast at <a href="https://www.gov.uk/check-state-pension" target="_blank">gov.uk/check-state-pension</a> for the exact date</li>
         <li>The State Pension Age field below is separate and records the statutory age from the scheme rules</li>
+        <li>Voyant pays a full year's State Pension from the start of the tax year in which the owner reaches this age. If only part of a year's State Pension will be received in that first tax year, one way to model it is to set both the Start Age and the State Pension Age a year later, and add a Windfall in the tax year State Pension age is reached, for the amount expected. Set the Windfall as taxable, with Taxation Type Income. Moving the State Pension Age as well stops Voyant treating the later start as deferral and adding a deferral increase (tested). Check Year View &gt; Cash Flow, and treat the result as an approximation.</li>
       </ul>
     `,
   },
@@ -3486,8 +3595,9 @@ window.SHACKADEMY_FIELDS = [
       <p>Enter the annual State Pension amount. For a pension not yet in payment, enter the projected amount from the government's State Pension forecast.</p>
       <h3>Tips</h3>
       <ul>
-        <li>Under current government policy the State Pension escalates automatically in Voyant using the Triple Lock - the higher of National Average Earnings, CPI, or 2.5% - using assumptions from your Plan Settings</li>
+        <li>Voyant increases the State Pension each year using the earnings and price inflation rates in Plan Settings</li>
         <li>Get the State Pension forecast at <a href="https://www.gov.uk/check-state-pension" target="_blank">gov.uk/check-state-pension</a></li>
+        <li>The amount you enter isn't updated automatically when your plan moves to a new plan year. Review it against your latest State Pension forecast each year.</li>
       </ul>
     `,
   },
@@ -3499,7 +3609,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Enter the annual amount of any Additional State Pension (also known as the Second State Pension, or S2P) accrued under the old pre-2016 State Pension system.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This only applies to people who reached State Pension age before 6 April 2016, or who have a protected entitlement from the old system</li>
+        <li>Your State Pension forecast shows whether this applies</li>
         <li>The amount will be shown on the owner's State Pension forecast from the government - if none is shown, leave this blank</li>
         <li>Under the new flat-rate State Pension (post-April 2016), most of the Additional State Pension is incorporated into the main figure</li>
       </ul>
@@ -3510,10 +3620,10 @@ window.SHACKADEMY_FIELDS = [
     label: "Graduated State Pension Amount",
     helpText: `
       <h3>What to enter</h3>
-      <p>Enter any Graduated State Pension entitlement. This is an older state pension element accrued between 1961 and 1975 under the Graduated Retirement Benefit scheme.</p>
+      <p>Enter any Graduated State Pension entitlement. This is an older State Pension element from the Graduated Retirement Benefit scheme.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This will only be relevant for older users - anyone who worked and paid graduated NI contributions between 1961 and 1975 may have a small entitlement</li>
+        <li>Your State Pension forecast shows whether this applies</li>
         <li>The amount will appear on the State Pension forecast if it applies - if nothing is shown, leave this blank</li>
       </ul>
     `,
@@ -3523,11 +3633,11 @@ window.SHACKADEMY_FIELDS = [
     label: "Manually Enter Escalation Rate",
     helpText: `
       <h3>What to enter</h3>
-      <p>Toggle this on if you want to override Voyant's default Triple Lock escalation with a specific fixed rate of your choice.</p>
+      <p>Toggle this on if you want to override Voyant's default escalation with a specific fixed rate of your choice.</p>
       <h3>Tips</h3>
       <ul>
-        <li>By default, Voyant escalates the State Pension using the Triple Lock (the higher of NAE, CPI, or 2.5%) - this is the current government policy</li>
-        <li>Toggle this on if you want to model a scenario where the Triple Lock is removed or changed - for example, using a flat 2.5% or CPI-only increase</li>
+        <li>By default, Voyant increases the State Pension each year using the earnings and price inflation rates in Plan Settings</li>
+        <li>Toggle this on to model a different increase, for example if the current policy changes</li>
         <li>This can be a useful stress-test for people who are significantly reliant on the State Pension in retirement</li>
       </ul>
     `,
@@ -3602,6 +3712,19 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>The debt type helps classify the debt in Voyant.</li>
         <li>If the debt is linked to a property, check the 'Linked Property' tab to ensure this is reflected in Voyant.</li>
+        <li>Debts added from the + menu default to Other. A debt added from a property's Linked Debts tab defaults to Mortgage, which adds the Offset Savings Account field. There's no student loan type.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "offsetSavingsAccount",
+    label: "Offset Savings Account",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose the savings account that offsets this mortgage.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Only savings accounts you've added appear here, not the default cash accounts.</li>
       </ul>
     `,
   },
@@ -3654,6 +3777,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Check Year View to confirm the debt is reducing as expected.</li>
         <li>If the balance is not reducing as expected, review the interest rate, payment type, payment amount, and duration fields together.</li>
+        <li>Voyant works out a yearly payment and divides it by 12, so it can differ slightly from your lender's figure.</li>
       </ul>
     `,
   },
@@ -3688,6 +3812,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>If the debt already exists and the money has already been spent, this may not be appropriate.</li>
         <li>Check the cash flow after saving to ensure the loan proceeds appear in the way you expect.</li>
+        <li>For a debt that starts in the future, Voyant pays the amount into the plan when the debt starts. It shows in Cash Flow as a credit from the debt.</li>
       </ul>
     `,
   },
@@ -3709,6 +3834,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>Use Payoff if you want to clear the debt completely at a particular event.</li>
         <li>Use Specified Amount if you want to model a partial repayment.</li>
+        <li>A Payoff in a One Time Payment charges a full year's interest in that year. A debt repaid by selling a linked property doesn't.</li>
       </ul>
     `,
   },
@@ -3878,6 +4004,7 @@ window.SHACKADEMY_FIELDS = [
         <li>This field is used to specify how much of the line of credit is paid down each year.</li>
         <li>If no repayment is entered, check whether interest is rolling up or whether the balance remains outstanding.</li>
         <li>Use <strong>Year View: Debts</strong> to confirm the projected behaviour.</li>
+        <li>Unlike a Debt, this is a yearly figure.</li>
       </ul>
     `,
   },
@@ -3961,6 +4088,7 @@ window.SHACKADEMY_FIELDS = [
         <li>For an existing arrangement, this should usually be the current amount owed.</li>
         <li>For a new arrangement, this may represent the initial amount being borrowed.</li>
         <li>Check Year View: Debts to confirm how the balance grows or is repaid over time.</li>
+        <li>For a new arrangement, Voyant works out the Annual Advance from this amount less fees and any lump sum.</li>
       </ul>
     `,
   },
@@ -4013,7 +4141,7 @@ window.SHACKADEMY_FIELDS = [
     label: "Annual Advance",
     helpText: `
       <h3>What to enter</h3>
-      <p>Enter any annual amount expected to be advanced from the equity release arrangement.</p>
+      <p>For a new arrangement, Voyant works this out from the Mortgage Amount less fees and any lump sum, and it must be more than nil. For an existing arrangement, enter the yearly advance.</p>
       <h3>Tips</h3>
       <ul>
         <li>This may be used where funds are drawn gradually rather than all at once.</li>
@@ -4075,6 +4203,7 @@ window.SHACKADEMY_FIELDS = [
     key: "loanInputOwnerLabel",
     label: "Lender",
     helpText: `
+      <p>This is for money you have lent to someone else. For money you owe, use Debt.</p>
       <h3>What this means</h3>
       <p>The lender is the person who initially paid out the money.</p>
       <p>The borrower is the person who will be paying the money back to the lender through this loan.</p>
@@ -4329,6 +4458,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
     <h3>What to enter</h3>
     <p>Select Yes if the policy is held in trust.</p>
+    <h3>Tips</h3>
+    <ul>
+      <li>In Voyant, if a life policy isn't held in trust, the payout is counted as part of the insured person's estate when inheritance tax is worked out, even if you've named a beneficiary. If it is held in trust, the payout isn't counted. Overview &gt; Legacy shows the difference.</li>
+    </ul>
   `,
   },
 
@@ -4380,6 +4513,10 @@ window.SHACKADEMY_FIELDS = [
     </ul>
     <h3>Example</h3>
     <p>If a Family Income Benefit policy starts in 5 years and has a term of 10 years, and the policyholder's mortality event is 7 years from now, the income benefit would be paid for the remaining 8 years of the policy term.</p>
+    <h3>Tips</h3>
+    <ul>
+      <li>This is pre-filled with a default term. Enter the term actually remaining on the policy.</li>
+    </ul>
   `,
   },
 
@@ -4440,6 +4577,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Voyant automatically creates an expense for this premium.</li>
       <li>Be careful not to double count the premium by also adding it manually as an expense.</li>
+      <li>Review your spending goals to make sure they don't also include this premium.</li>
     </ul>
     <h3>Tips</h3>
     <ul>
@@ -4544,6 +4682,7 @@ window.SHACKADEMY_FIELDS = [
       <li>This may be relevant for endowment-style policies.</li>
       <li>Check the maturity value, taxation, growth, and fees settings if a payout is expected.</li>
       <li>Review Year View to confirm the maturity payout appears at the expected time.</li>
+      <li>A maturity value is paid in the year after the term ends.</li>
     </ul>
   `,
   },
@@ -4675,7 +4814,8 @@ window.SHACKADEMY_FIELDS = [
       <li>This may be relevant for policies intended to clear debts rather than provide a wider surplus.</li>
       <li>Check the payout amount in Year View or Life Needs Insight to confirm it is limited as expected.</li>
       <li>Make sure the relevant liabilities are entered correctly in the plan.</li>
-      <li>Drag debts into the 'Payout these Debts first' column as appropriate.</li>
+      <li>Add debts to 'Payoff the following debts first' by clicking them, as appropriate.</li>
+      <li>A Debt Payouts payout goes straight to the debt at the start of that year.</li>
     </ul>
   `,
   },
@@ -4724,6 +4864,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Voyant automatically creates an expense for this premium.</li>
       <li>Be careful not to double count the premium by also adding it manually as an expense.</li>
+      <li>Review your spending goals to make sure they don't also include this premium.</li>
     </ul>
     <h3>Tips</h3>
     <ul>
@@ -4769,6 +4910,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
     <h3>What to enter</h3>
     <p>Select whether the whole life policy is held in trust.</p>
+    <h3>Tips</h3>
+    <ul>
+      <li>In Voyant, if a life policy isn't held in trust, the payout is counted as part of the insured person's estate when inheritance tax is worked out, even if you've named a beneficiary. If it is held in trust, the payout isn't counted. Overview &gt; Legacy shows the difference.</li>
+    </ul>
   `,
   },
 
@@ -4814,6 +4959,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Voyant automatically creates an expense for this premium.</li>
       <li>Be careful not to double count the premium by also adding it manually as an expense.</li>
+      <li>Review your spending goals to make sure they don't also include this premium.</li>
     </ul>
     <h3>Tips</h3>
     <ul>
@@ -4853,6 +4999,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Use the option that matches the policy terms.</li>
       <li>If using Percent of Income, make sure the relevant income and employment details are accurate.</li>
+      <li>Employee cover has no premium field, because Voyant treats it as paid by the employer. In Voyant, the benefit is treated as taxable income, and it's only paid during a Disability event.</li>
     </ul>
   `,
   },
@@ -4876,6 +5023,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Use this where the policy benefit is index-linked or expected to escalate.</li>
       <li>If the benefit is level, use 0%.</li>
+      <li>This defaults to 0%, a level benefit.</li>
     </ul>
   `,
   },
@@ -4904,6 +5052,7 @@ window.SHACKADEMY_FIELDS = [
     <h3>Tips</h3>
     <ul>
       <li>The policy will cancel itself beyond this age.</li>
+      <li>This is pre-filled with a default. Check it against your policy.</li>
     </ul>
   `,
   },
@@ -4923,6 +5072,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Use Present Value when entering today's premium or benefit amount.</li>
       <li>Use Future Value only where the amount already reflects the value at a future point.</li>
+      <li>This defaults to Future Value.</li>
     </ul>
   `,
   },
@@ -4982,6 +5132,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Voyant automatically creates an expense for this premium.</li>
       <li>Be careful not to double count the premium by also adding it manually as an expense.</li>
+      <li>Review your spending goals to make sure they don't also include this premium.</li>
     </ul>
     <h3>Tips</h3>
     <ul>
@@ -5001,7 +5152,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>This should usually be the policy's sum assured.</li>
       <li>Use the latest policy schedule or statement.</li>
-      <li>Check the plan output where a disability or illness event is modelled.</li>
+      <li>The benefit is only paid if you add a Critical illness event for the insured person on the Timeline. A Disability event doesn't trigger it.</li>
     </ul>
   `,
   },
@@ -5106,6 +5257,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Voyant automatically creates an expense for this premium.</li>
       <li>Be careful not to double count the premium by also adding it manually as an expense.</li>
+      <li>Review your spending goals to make sure they don't also include this premium.</li>
     </ul>
     <h3>Tips</h3>
     <ul>
@@ -5194,6 +5346,7 @@ window.SHACKADEMY_FIELDS = [
     <ul>
       <li>Use the option that matches the policy terms.</li>
       <li>Benefit inflation can materially affect long-term care projections.</li>
+      <li>This defaults to Compound, with a pre-filled rate. Check both against your policy.</li>
     </ul>
   `,
   },
@@ -5209,6 +5362,7 @@ window.SHACKADEMY_FIELDS = [
       <li>This applies where Benefit Inflation is set to Simple or Compound.</li>
       <li>Use the policy schedule or provider documentation.</li>
       <li>Check the projected benefit amount over time after saving.</li>
+      <li>This defaults to Compound, with a pre-filled rate. Check both against your policy.</li>
     </ul>
   `,
   },
@@ -5262,10 +5416,10 @@ window.SHACKADEMY_FIELDS = [
     label: "Transfer Before Paying Expenses",
     helpText: `
       <h3>What to enter</h3>
-      <p>Select 'Yes' if this transfer should be prioritised <strong>before</strong> the plan's expenses are met - this prevents the funds being used to cover expenses instead.</p>
+      <p>Choose whether this transfer happens before or after the year's spending is paid.</p>
       <h3>Tips</h3>
       <ul>
-        <li>If left as 'No', expenses will be met first, with any remaining funds contributed to the target account</li>
+        <li>With All Available, ticking this moves all the year's money before spending is paid, so spending may then be met by selling other assets. Unticked, only what's left after spending moves. Check Year View to see which suits what you're modelling.</li>
       </ul>
     `,
   },
@@ -5416,6 +5570,7 @@ window.SHACKADEMY_FIELDS = [
         <li><strong>Percentage:</strong> available for bequests to Charity, Spouse, or Other - a share of the estate</li>
         <li><strong>Amount:</strong> a fixed sum, available for bequests to Charity, Spouse, or Other</li>
         <li><strong>Percentage of Threshold:</strong> only available for 'Other' (including non-legal partners) - models a proportion of the Nil Rate Band being left to a beneficiary other than the spouse or charity</li>
+        <li>If you add an 'Other' line to your estate plan but don't want to use it, set its Type to Percentage at 0%, not Percentage of Threshold. After setting up an estate plan, check where the estate goes in Year View &gt; Cash Flow, under Not Displayed on Chart, in the year of the first death.</li>
       </ul>
       <h3>Reference</h3>
       <ul>
@@ -5430,6 +5585,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
       <h3>What to enter</h3>
       <p>Enter the percentage of the estate (or, for 'Other', the percentage of the Nil Rate Band threshold) to be distributed to this beneficiary category.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>If you add an 'Other' line to your estate plan but don't want to use it, set its Type to Percentage at 0%, not Percentage of Threshold. After setting up an estate plan, check where the estate goes in Year View &gt; Cash Flow, under Not Displayed on Chart, in the year of the first death.</li>
+      </ul>
     `,
   },
   {
@@ -5490,7 +5649,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This default can be overridden at the individual item level</li>
-        <li>Changing this will only affect new plans created - for existing plans, growth assumptions can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default. Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5503,7 +5662,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, growth assumptions can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default. Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5517,7 +5676,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, growth assumptions can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default. Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5531,7 +5690,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>For a future property purchase, the Inflation Rate (not this rate) is used to calculate the future purchase price</li>
         <li>This default can be overridden at the individual property level</li>
-        <li>Changing this will only affect new plans created - for existing plans, growth assumptions can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default. Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5540,11 +5699,11 @@ window.SHACKADEMY_FIELDS = [
     label: "National Average Earnings",
     helpText: `
       <h3>What this is</h3>
-      <p>The default rate used to escalate Employment and Other Income amounts over time. It also forms part of the Triple Lock formula used to escalate the State Pension.</p>
+      <p>The default rate used to escalate Employment and Other Income amounts over time. It's also one of the rates Voyant uses to increase the State Pension.</p>
       <h3>Tips</h3>
       <ul>
         <li>This default can be overridden at the individual income item level</li>
-        <li>Changing this will only affect new plans created - for existing plans, growth assumptions can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default. Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5557,7 +5716,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This default can be overridden at the individual item level</li>
-        <li>Changing this will only affect new plans created - for existing plans, growth assumptions can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default (tested). Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5587,6 +5746,10 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
       <h3>What this is</h3>
       <p>An across-the-board annual escalation rate applied to future tax-related assumptions - tax brackets, allowances, thresholds, and contribution allowances for investments and pensions.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Voyant applies frozen thresholds first and uses this rate only after a freeze ends.</li>
+      </ul>
     `,
   },
   {
@@ -5597,7 +5760,7 @@ window.SHACKADEMY_FIELDS = [
       <p>The rate used to escalate the UK Inheritance Tax Nil Rate Band.</p>
       <h3>Tips</h3>
       <ul>
-        <li>The Nil Rate Band is fixed at £325,000 by legislation until 2030 - this setting only affects escalation from 2030 onwards</li>
+        <li>Voyant applies legislated freezes first. This rate is used after a freeze ends.</li>
       </ul>
     `,
   },
@@ -5627,7 +5790,7 @@ window.SHACKADEMY_FIELDS = [
       <ul>
         <li>By default Voyant reinvests yield rather than paying it out</li>
         <li>This can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, this can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default (tested). Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5661,107 +5824,230 @@ window.SHACKADEMY_FIELDS = [
   // ── Tab: Fees & Taxation ──────────────────────────────────────
 
   {
-    key: "ce0e199e-0268-4931-9e12-eb950cdb83ce",
+    key: "plan-settings-fees-product-cash-savings",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Product Fees",
+      text: "Cash Savings",
+    },
     label: "Product Fees - Cash Savings",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual product fee applied to cash savings accounts. Fees are deducted from capital growth.</p>
+      <p>The default annual product fee applied to cash savings accounts. The Product Fee is deducted from growth.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
     `,
   },
   {
-    key: "dc49f3fd-951d-4fc5-a523-9e684491679e",
+    key: "plan-settings-fees-product-taxable",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Product Fees",
+      text: "Taxable",
+    },
     label: "Product Fees - Taxable",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual product fee applied to taxable (unwrapped) investment accounts. Fees are deducted from capital growth.</p>
+      <p>The default annual product fee applied to taxable (unwrapped) investment accounts. The Product Fee is deducted from growth.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
     `,
   },
   {
-    key: "d65bcb85-7079-4e00-b047-a008cb706810",
+    key: "plan-settings-fees-product-tax-deferred",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Product Fees",
+      text: "Tax-Deferred",
+    },
     label: "Product Fees - Tax-Deferred",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual product fee applied to tax-deferred accounts (e.g. pensions, bonds). Fees are deducted from capital growth.</p>
+      <p>The default annual product fee applied to tax-deferred accounts (e.g. pensions, bonds). The Product Fee is deducted from growth.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
     `,
   },
   {
-    key: "dcc403ad-a02e-40e1-9205-7353d2b97e8a",
+    key: "plan-settings-fees-product-tax-free",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Product Fees",
+      text: "Tax-Free",
+    },
     label: "Product Fees - Tax-Free",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual product fee applied to tax-free accounts (e.g. ISAs). Fees are deducted from capital growth.</p>
+      <p>The default annual product fee applied to tax-free accounts (e.g. ISAs). The Product Fee is deducted from growth.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
     `,
   },
   {
-    key: "d5dd7d10-eb15-4eee-9303-a64fa4110948",
+    key: "plan-settings-fees-advice-cash-savings",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Ongoing Advice Fees",
+      text: "Cash Savings",
+    },
     label: "Ongoing Advice Fees - Cash Savings",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual ongoing advice fee applied to cash savings accounts. Fees are deducted from capital growth.</p>
+      <p>The default annual ongoing advice fee applied to cash savings accounts. The Ongoing Advice Fee is treated as a withdrawal: it's taken out of the account each year and included in the account's Withdrawals in Year View. It's also listed under Not Displayed on Chart in Year View &gt; Cash Flow and Expenses.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
     `,
   },
   {
-    key: "c53a4689-d169-4699-9ce5-b276e3c526c7",
+    key: "plan-settings-fees-advice-taxable",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Ongoing Advice Fees",
+      text: "Taxable",
+    },
     label: "Ongoing Advice Fees - Taxable",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual ongoing advice fee applied to taxable (unwrapped) investment accounts. Fees are deducted from capital growth.</p>
+      <p>The default annual ongoing advice fee applied to taxable (unwrapped) investment accounts. The Ongoing Advice Fee is treated as a withdrawal: it's taken out of the account each year and included in the account's Withdrawals in Year View. It's also listed under Not Displayed on Chart in Year View &gt; Cash Flow and Expenses.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
     `,
   },
   {
-    key: "dba039ae-3d6d-4e0f-a073-b57126ffaa65",
+    key: "plan-settings-fees-advice-tax-deferred",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Ongoing Advice Fees",
+      text: "Tax-Deferred",
+    },
     label: "Ongoing Advice Fees - Tax-Deferred",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual ongoing advice fee applied to tax-deferred accounts (e.g. pensions, bonds). Fees are deducted from capital growth.</p>
+      <p>The default annual ongoing advice fee applied to tax-deferred accounts (e.g. pensions, bonds). The Ongoing Advice Fee is treated as a withdrawal: it's taken out of the account each year and included in the account's Withdrawals in Year View. It's also listed under Not Displayed on Chart in Year View &gt; Cash Flow and Expenses.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
     `,
   },
   {
-    key: "cc8d86ab-14f2-437e-84d4-1199df4fca00",
+    key: "plan-settings-fees-advice-tax-free",
+    match: {
+      section: "plan-settings",
+      tab: "fees",
+      group: "Ongoing Advice Fees",
+      text: "Tax-Free",
+    },
     label: "Ongoing Advice Fees - Tax-Free",
     helpText: `
       <h3>What to enter</h3>
-      <p>The default annual ongoing advice fee applied to tax-free accounts (e.g. ISAs). Fees are deducted from capital growth.</p>
+      <p>The default annual ongoing advice fee applied to tax-free accounts (e.g. ISAs). The Ongoing Advice Fee is treated as a withdrawal: it's taken out of the account each year and included in the account's Withdrawals in Year View. It's also listed under Not Displayed on Chart in Year View &gt; Cash Flow and Expenses.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, fees can only be updated at the item level</li>
+        <li>Changing this updates every account of this type in this plan that's still on the default. Once you've edited an account's fee, it no longer follows this setting, even if you click Use Defaults.</li>
+        <li>Shackademy's suggested approach is to leave these defaults at 0% and enter fees on each account instead. Fees usually differ between accounts and providers, and a default here applies to every account of that type, including any that don't charge it.</li>
+        <li>Fees are taken in addition to the account's growth rate. If the growth rate you're using already allows for fees, entering them here as well counts them twice.</li>
       </ul>
+    `,
+  },
+
+  // ── Account Fees tab (savings, investments and pensions) ─────
+
+  {
+    key: "feeRateInput",
+    label: "Product Fee",
+    helpText: `
+      <h3>What this is</h3>
+      <p>The yearly charge for the product or platform. It's taken off this account's growth, so Year View's Net Growth is after it.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>The figure shown is the default from Plan Settings &gt; Fees. Click Edit to enter your own figure for this account. Once edited, the account keeps its own figure, even if you click Use Defaults, so later changes in Plan Settings won't reach it.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "adviceFeePctInput",
+    label: "Ongoing Advice Fee",
+    helpText: `
+      <h3>What this is</h3>
+      <p>A yearly fee for ongoing financial advice on this account, if you pay one. Voyant takes it out of the account as a withdrawal, so it shows in the account's Withdrawals in Year View, not in Net Growth.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>The figure shown is the default from Plan Settings &gt; Fees. Click Edit to enter your own figure for this account. Once edited, the account keeps its own figure, even if you click Use Defaults, so later changes in Plan Settings won't reach it.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "adviceFeeCalcMethod",
+    label: "Ongoing Advice Fee Type",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose whether this fee is a Percentage, an Amount, or an Amount with Inflation.</p>
+    `,
+  },
+  {
+    key: "initialAdviceChargeCalcMethod",
+    label: "Initial Advice Fee Type",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose whether this fee is a Percentage, an Amount, or an Amount with Inflation.</p>
+    `,
+  },
+  {
+    key: "initialAdviceChargePct",
+    label: "Initial Advice Fee",
+    helpText: `
+      <h3>What this is</h3>
+      <p>A one-off fee, if one applies. Check Year View to make sure it's been allowed for. If it hasn't, you may need to reduce the contribution or withdrawal accordingly.</p>
+    `,
+  },
+  {
+    key: "exitChargeCalcMethod",
+    label: "Exit Fee Type",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose whether this fee is a Percentage, an Amount, or an Amount with Inflation.</p>
+    `,
+  },
+  {
+    key: "exitChargePct",
+    label: "Exit Fee",
+    helpText: `
+      <h3>What this is</h3>
+      <p>A one-off fee, if one applies. Check Year View to make sure it's been allowed for. If it hasn't, you may need to reduce the contribution or withdrawal accordingly.</p>
     `,
   },
   {
@@ -5773,7 +6059,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This default can be overridden at the individual account level</li>
-        <li>Changing this will only affect new plans created - for existing plans, this can only be updated at the item level</li>
+        <li>Changing this updates every item in this plan that's still on the default (tested). Once you've entered your own figure on an item, it no longer follows this setting, even if you later change it back to the same figure.</li>
       </ul>
     `,
   },
@@ -5785,8 +6071,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Sets the default internal tax rate applied to onshore bonds, capturing the relative tax difference between onshore and offshore bonds.</p>
       <h3>Tips</h3>
       <ul>
-        <li>This rate is applied only to growth on the account - e.g. a 20% rate would reduce a 5% headline growth rate to 4% (a 1% reduction, i.e. 20% of the growth)</li>
-        <li>Unless you have reason to change this, we would suggest leaving it as is</li>
+        <li>This rate is applied only to growth on the account</li>
       </ul>
     `,
   },
@@ -5813,8 +6098,9 @@ window.SHACKADEMY_FIELDS = [
       <p>Sets how many consecutive years the Major Loss event runs for - between 1 and 5.</p>
       <h3>Tips</h3>
       <ul>
-        <li>For each year, you can set a separate growth deviation under 'Fixed Growth' and/or 'Allocation Percentile'</li>
-        <li>Use Year View > Investments and Pensions > Net Growth to check the deviation has been applied, and that growth returns to normal afterwards</li>
+        <li>For each year, you enter the growth for that year under 'Fixed Growth' and/or 'Allocation Percentile'</li>
+        <li>Use Year View > Investments and Pensions > Net Growth to check the loss has been applied, and that growth returns to normal afterwards</li>
+        <li>Fixed Growth replaces the growth rate of accounts on an entered rate. Allocation Percentile applies to Portfolio/Holdings accounts. Accounts with Growth is Fixed ticked aren't affected.</li>
       </ul>
     `,
   },
@@ -5842,7 +6128,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>Usually switched off by default - Voyant normally assumes unallocated surplus is spent</li>
-        <li>Leaving this switched off is the conservative approach</li>
+        <li>'Save excess income after retirement' is a separate setting with its own tooltip. Check Year View after changing either one.</li>
       </ul>
     `,
   },
@@ -5855,7 +6141,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>Usually switched off by default</li>
-        <li>Before retirement, surplus is still assumed spent unless 'Transfer all excess income / credits to savings' is also switched on</li>
+        <li>'Transfer all excess income / credits to savings' is a separate setting with its own tooltip. Check Year View after changing either one.</li>
       </ul>
     `,
   },
@@ -5878,7 +6164,7 @@ window.SHACKADEMY_FIELDS = [
   {
     key: "includeCashNotDisplayedInIncome",
     label:
-      "Income incomes not displayed on Cash Flow chart (Income vs Expenditures)",
+      "Include incomes not displayed on Cash Flow chart (Income vs Expenditures)",
     helpText: `
       <h3>What to enter</h3>
       <p>Controls whether incomes that are hidden from the cash flow chart - such as protection payouts - are shown on the Income vs Expenditure Overview.</p>
@@ -5920,7 +6206,11 @@ window.SHACKADEMY_FIELDS = [
     label: "Country",
     helpText: `
       <h3>What to enter</h3>
-      <p>Select England/Wales, Scotland, or Northern Ireland, so that the appropriate tax rules are applied to this plan.</p>
+      <p>England, Scotland, Wales or Northern Ireland. This is set for each person, and it decides which income tax bands apply to them, including on rent.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Shackademy sets this when your plan is created, so you only need to change it if your circumstances change.</li>
+      </ul>
     `,
   },
 
@@ -5962,6 +6252,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>If unsure of the remaining amount, check with the pension provider(s) involved</li>
+        <li>Voyant pre-fills the full allowances. If you've already taken tax-free cash, including from a pension now being paid, reduce these. Voyant uses the figure you enter.</li>
       </ul>
     `,
   },
@@ -5974,6 +6265,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>If unsure of the remaining amount, check with the pension provider(s) involved</li>
+        <li>Voyant pre-fills the full allowances. If you've already taken tax-free cash, including from a pension now being paid, reduce these. Voyant uses the figure you enter.</li>
       </ul>
     `,
   },
@@ -5986,6 +6278,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>Pension providers can usually confirm contribution history; an accountant or financial adviser can help calculate what's available to carry forward</li>
+        <li>Add Carry Forward adds one row for each earlier tax year. Enter the unused allowance for each year.</li>
       </ul>
     `,
   },
@@ -6069,7 +6362,7 @@ window.SHACKADEMY_FIELDS = [
       <p>If any capital gains have already been realised in the current tax year, before you entered your details into Voyant, enter the amount here.</p>
       <h3>Tips</h3>
       <ul>
-        <li>Remember, if entering details between April and October then we're looking at the current tax year. If entering details between October and April then we're looking at next tax year, so this won't be relevant.</li>
+        <li>Enter any capital gains already made in the tax year before the plan's first year. If you're unsure which tax year this means, ask in the Shackademy community.</li>
       </ul>
     `,
   },
@@ -6082,7 +6375,7 @@ window.SHACKADEMY_FIELDS = [
       <h3>Tips</h3>
       <ul>
         <li>This information is usually available from previous tax returns or, if applicable, an accountant</li>
-        <li>Remember, if entering details between April and October then we're looking at the current tax year. If entering details between October and April then we're looking at next tax year.</li>
+        <li>If you're unsure which tax year this means, ask in the Shackademy community.</li>
       </ul>
     `,
   },
@@ -6167,7 +6460,7 @@ window.SHACKADEMY_FIELDS = [
     label: "Net Growth (Investment)",
     helpText: `
       <h3>What this shows</h3>
-      <p>The growth applied to this investment during the {{TAX_YEAR_RANGE}} tax year, after any fees.</p>
+      <p>The growth for this account in the {{TAX_YEAR_RANGE}} tax year, after product fees. It includes any yield. The ongoing advice fee isn't taken off here: it's taken as a withdrawal, so it's in the Withdrawals column. Click the account's name to see Net Growth After Annual Fees.</p>
     `,
   },
   {
@@ -6183,7 +6476,7 @@ window.SHACKADEMY_FIELDS = [
     label: "Net Growth (Pension)",
     helpText: `
       <h3>What this shows</h3>
-      <p>The growth applied to this pension during the {{TAX_YEAR_RANGE}} tax year, after any fees.</p>
+      <p>The growth for this pension in the {{TAX_YEAR_RANGE}} tax year, after product fees. It includes any yield. The ongoing advice fee isn't taken off here: it's taken as a withdrawal, so it's in the Withdrawals column. Click the pension's name to see Net Growth After Annual Fees.</p>
     `,
   },
   {
@@ -6208,6 +6501,178 @@ window.SHACKADEMY_FIELDS = [
     helpText: `
       <h3>What this shows</h3>
       <p>The projected outstanding balance of this debt as at the end of the {{TAX_YEAR_RANGE}} tax year.</p>
+    `,
+  },
+
+  // ============================================================
+  // CATEGORY: Insights
+  // ============================================================
+  // Scoped with `sections` so generic IDs (person, planSelect...) only
+  // show these tooltips on their own insight.
+
+  {
+    key: "person",
+    sections: ["insight-annuity"],
+    label: "Purchase Annuity for",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose whose pensions are used to buy the annuity.</p>
+    `,
+  },
+  {
+    key: "calculationMethod",
+    sections: ["insight-annuity"],
+    label: "Calculation Method",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose how the annuity income is worked out: from an annuity rate you enter, or from Voyant's assumed interest rate (set in Plan Settings).</p>
+    `,
+  },
+  {
+    key: "annuityRate",
+    sections: ["insight-annuity"],
+    label: "Assumed Interest Rate / Annuity Rate",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>The rate used to turn the amount transferred into yearly annuity income. If you have a quote, you can use its rate here.</p>
+    `,
+  },
+  {
+    key: "PercentQualifiedInvestmentsToTransferLabel",
+    sections: ["insight-annuity"],
+    label: "% of Pensions to be transferred",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>The share of the selected pensions used to buy the annuity. The amount in brackets updates as you move the slider.</p>
+    `,
+  },
+  {
+    key: "NonSecureAssetAllocationLabel",
+    sections: ["insight-annuity"],
+    label: "Asset Allocation for Non-Secure Investments",
+    helpText: `
+      <h3>What this is</h3>
+      <p>This setting doesn't apply to Shackademy plans. Voyant uses your plan's own growth assumptions for the money that isn't used to buy the annuity, as the note on screen says.</p>
+    `,
+  },
+  {
+    key: "NumOfYearsToExtendLifespanLabel",
+    sections: ["insight-annuity"],
+    label: "Live Longer",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Adds years to everyone's life expectancy, to test whether the money lasts if you live longer than the plan assumes.</p>
+    `,
+  },
+  {
+    key: "inflationAdjustmentRate",
+    sections: ["insight-inflation"],
+    label: "Inflation Adjustment Rate",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>The extra inflation added each year, on top of the plan's own rates, for the period shown.</p>
+    `,
+  },
+  {
+    key: "inflation-adjustment-rate",
+    sections: ["insight-inflation"],
+    label: "Inflation Adjustment Period",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Sets the period the extra inflation applies to: leave it as the whole plan, or drag the slider to choose a range of years.</p>
+    `,
+  },
+  {
+    key: "includeCashAccountsInput",
+    sections: ["insight-investment-returns"],
+    label: "Include Cash Accounts",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Tick to include cash savings in the accounts the required return applies to. Leave unticked for a figure for your investments only.</p>
+    `,
+  },
+  {
+    key: "marketCrashInputAge",
+    sections: ["insight-market-crash"],
+    label: "Age",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>The age at which the crash starts. The default comes from Plan Settings &gt; Major Loss &gt; Default Age.</p>
+    `,
+  },
+  {
+    key: "planSelect",
+    sections: ["insight-iht"],
+    label: "Comparison Plan",
+    helpText: `
+      <h3>What to enter</h3>
+      <p>Choose another plan (for example a What If) to compare inheritance tax side by side. Leave as No Plan Selected to see this plan only.</p>
+    `,
+  },
+  {
+    key: "form-retirementSpendingInsight-includeMilestoneGoals",
+    sections: ["insight-retirement-spending"],
+    label: "Include Milestone Goals",
+    helpText: `
+      <p><strong>On:</strong> your milestone goals stay in the plan, and the result is what you could spend in addition to them. For example, with a one-off goal of £100,000 and a result of £70,000 a year, spending in the year of the goal could be £170,000.</p>
+      <p><strong>Off:</strong> milestone goals are taken out, and the result assumes you don't make them.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Only milestone goals entered as goals (not expenses) are affected.</li>
+        <li>Check Year View &gt; Expenses inside the insight to see what was included.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "form-retirementSpendingInsight-includeGiftingGoals",
+    sections: ["insight-retirement-spending"],
+    label: "Include Gifting Goals",
+    helpText: `
+      <p><strong>On:</strong> your gifting goals stay in the plan, and the result is what you could spend in addition to the gifts.</p>
+      <p><strong>Off:</strong> gifting goals are taken out, so the result answers "what could I spend if I made no gifts?"</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Only gifts entered as gifting goals are affected.</li>
+        <li>Check Year View &gt; Expenses inside the insight to see what was included.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "form-retirementSpendingInsight-includeEducationGoals",
+    sections: ["insight-retirement-spending"],
+    label: "Include Education Goals",
+    helpText: `
+      <p><strong>On:</strong> your education goals stay in the plan, and the result is what you could spend in addition to them.</p>
+      <p><strong>Off:</strong> education goals are taken out, and the result assumes you don't pay them.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Only education costs entered as education goals are affected.</li>
+        <li>Check Year View &gt; Expenses inside the insight to see what was included.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "form-retirementSpendingInsight-netOfMandatoryExpenses",
+    sections: ["insight-retirement-spending"],
+    label: "Net of Mandatory Expenses",
+    helpText: `
+      <p>Recurring mandatory expenses are regular debt and mortgage payments (including interest-only payments), ongoing advice fees and insurance premiums. They're always paid in the insight.</p>
+      <p><strong>On:</strong> the result is what you could spend in addition to them.</p>
+      <p><strong>Off:</strong> they're treated as part of the result, so some of the figure goes on paying them.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Use On to see what's left for everyday spending, or Off to see your total spending capacity.</li>
+      </ul>
+    `,
+  },
+  {
+    key: "form-retirementSpendingInsight-includeTaxes",
+    sections: ["insight-retirement-spending"],
+    label: "Include Taxes",
+    helpText: `
+      <p>Tax is always worked out in the insight. This toggle only changes how the result is shown.</p>
+      <p><strong>Off:</strong> the result is after tax, so it's what you could actually spend.</p>
+      <p><strong>On:</strong> the result includes tax, so it's the total you could take out, part of which goes on tax.</p>
     `,
   },
 ];
