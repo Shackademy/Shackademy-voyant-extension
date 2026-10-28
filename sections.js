@@ -23,6 +23,10 @@
 // Tab titles are built automatically as: "{name} - {Tab}"
 // You only need to write 'name' once.
 //
+// High-risk guides (Chrome Extension Monitoring Plan) are preceded by
+//   // HIGH-RISK: review on regulatory change (<topic>)
+// Search for "HIGH-RISK" during an interim review. No figures are stated.
+//
 // Reusable tab descriptions are defined at the top as TAB_DESCRIPTIONS.
 // Override any of them inline for a specific section if needed.
 // =============================================================================
@@ -364,6 +368,7 @@ window.SHACKADEMY_SECTIONS = {
     typeIndicator: "legacyExpenseInputOwnerLabel",
     lessons: ["income-expenses"],
     tabs: {
+      // HIGH-RISK: review on regulatory change (IHT)
       basics: {
         description: `
           <p>A Gifting Goal models a <strong>gift made by the owner/s</strong> - to another person in the plan, a person outside the plan, or a charity - as an expense that Voyant will try to meet from your income and assets.</p>
@@ -536,6 +541,7 @@ window.SHACKADEMY_SECTIONS = {
       "managing-withdrawals",
     ],
     tabs: {
+      // HIGH-RISK: review on regulatory change (ISA)
       basics: {
         description: `
           <p>This is where you enter <strong>cash savings accounts</strong> - current accounts, savings accounts, Cash ISAs, and National Savings Certificates.</p>
@@ -582,6 +588,7 @@ window.SHACKADEMY_SECTIONS = {
       "managing-withdrawals",
     ],
     tabs: {
+      // HIGH-RISK: review on regulatory change (ISA/bonds)
       basics: {
         description: `
           <p>This is where you enter <strong>investment accounts and wrappers</strong> - Stocks & Shares ISAs, Lifetime ISAs, onshore and offshore bonds, unwrapped investments, trusts, EIS, SEIS, VCTs, and more.</p>
@@ -701,6 +708,7 @@ window.SHACKADEMY_SECTIONS = {
     typeIndicator: "ukMoneyPurchaseInputType",
     lessons: ["pension-basics", "lump-sums", "pension-withdrawals"],
     tabs: {
+      // HIGH-RISK: review on regulatory change (pension allowances/relief)
       basics: {
         description: `
           <p>This is where you enter a <strong>defined contribution (money purchase) pension</strong> - including personal pensions, SIPPs, workplace pensions, and GPPs.</p>
@@ -732,6 +740,7 @@ window.SHACKADEMY_SECTIONS = {
         `,
       },
       steps: { description: window.TAB_DESCRIPTIONS.steps },
+      // HIGH-RISK: review on regulatory change (pension allowances/relief)
       crystallizations: {
         description: `
           <p>The Crystallisations tab allows you to model <strong>specific pension crystallisation events</strong> - the point at which pension benefits are formally accessed and tax-free cash is taken.</p>
@@ -892,6 +901,7 @@ window.SHACKADEMY_SECTIONS = {
     typeIndicator: "ukStatePensionInputOwnerLabel",
     lessons: ["pension-basics"],
     tabs: {
+      // HIGH-RISK: review on regulatory change (State Pension)
       basics: {
         description: `
           <p>This is where you enter the <strong>UK State Pension</strong> for each person in the plan.</p>
@@ -1516,6 +1526,7 @@ window.SHACKADEMY_SECTIONS = {
     typeIndicator: "estatePlanInputOwnerLabel",
     lessons: ["estate-plan", "asset-distribution"],
     tabs: {
+      // HIGH-RISK: review on regulatory change (IHT)
       basics: {
         description: `
           <p>An Estate Plan lets you override Voyant's <strong>default estate distribution logic</strong> to reflect the owner's actual will - for example, if part of the estate is bequeathed to children on first death rather than passing entirely to the spouse.</p>
@@ -1563,6 +1574,7 @@ window.SHACKADEMY_SECTIONS = {
           </ul>
         `,
       },
+      // HIGH-RISK: review on regulatory change (IHT/tax thresholds)
       basics: {
         description: `
           <p>Sets the default <strong>Inflation and Growth</strong> assumptions used throughout the plan. Individual items can use their own figure instead.</p>
@@ -1660,6 +1672,7 @@ window.SHACKADEMY_SECTIONS = {
     typeIndicator: "ukTaxAndAllowanceInfoInputExpectedRebate",
     lessons: ["intro-to-voyant"],
     tabs: {
+      // HIGH-RISK: review on regulatory change (pension allowances/IHT/CGT)
       basics: {
         description: `
           <p>Carryover Assumptions are used to capture <strong>tax-related details that predate the start of the plan</strong>.</p>
@@ -1779,6 +1792,7 @@ window.SHACKADEMY_SECTIONS = {
           ${YEAR_VIEW_NAVIGATION}
         `,
       },
+      // HIGH-RISK: review on regulatory change (income tax/CGT)
       taxdetails: {
         description: `
           <p>Taxes shows <strong>the tax worked out for each person this year</strong>. <strong>Expand All</strong> opens every section.</p>
@@ -1941,6 +1955,7 @@ window.SHACKADEMY_SECTIONS = {
     headingButton: true,
     lessons: INSIGHT_LESSONS,
     tabs: {
+      // HIGH-RISK: review on regulatory change (pension allowances/relief)
       basics: {
         description: `
           <p>Longevity Risk shows <strong>how buying an annuity with part of your pensions could affect the plan</strong>, including if you live longer than planned.</p>
@@ -2050,6 +2065,7 @@ window.SHACKADEMY_SECTIONS = {
     headingButton: true,
     lessons: INSIGHT_LESSONS,
     tabs: {
+      // HIGH-RISK: review on regulatory change (IHT)
       basics: {
         description: `
           <p>Potential IHT shows <strong>estimated inheritance tax over the life of the plan</strong>. Choose a Comparison Plan to compare it with a What If.</p>

@@ -8,6 +8,11 @@
 //   helpText - HTML string. Use <h3>, <p>, <ul>, <li>, <strong> etc. freely.
 //              This is hardcoded content so HTML is safe here.
 //
+// High-risk content (Chrome Extension Monitoring Plan): entries whose text
+// describes a tax, pension, IHT, ISA or State Pension rule are preceded by
+//   // HIGH-RISK: review on regulatory change (<topic>)
+// Search for "HIGH-RISK" during an interim review. No figures are stated.
+//
 // Optional:
 //   lessonUrl - Shackademy lesson link. Omit if none.
 //   videoUrl  - YouTube link in any format (will be auto-converted to embed).
@@ -756,6 +761,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "employmentInputAnnualDividend",
     label: "Dividend",
@@ -844,6 +850,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "otherIncomeTaxationType",
     label: "Taxation Type",
@@ -981,6 +988,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "taxationType",
     label: "Taxation Type",
@@ -1057,6 +1065,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (ISA)
   {
     key: "ukSavingInputSavingType",
     label: "Account Type",
@@ -1125,6 +1134,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Select how you wish to calculate regular contributions, either as a fixed amount (with or without inflation) or as a percentage of income.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "contributionType",
     sections: ["pension-money-purchase"],
@@ -1156,6 +1166,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "contributionAmount",
     sections: ["pension-money-purchase"],
@@ -1224,6 +1235,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "drawdownType",
     sections: ["planned-withdrawals"],
@@ -1273,6 +1285,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (ISA)
   {
     key: "investmentInputInvesmentType",
     label: "Type",
@@ -1339,6 +1352,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "investmentBypassTrustLoanAmount",
     label: "Loan Amount",
@@ -1383,6 +1397,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Select how the bond value is treated on death. For single-life bonds, the full value is paid out on death and will appear in the Legacy screen. For jointly-owned bonds with 'Last to Die' selected, the payout will not appear in the cash flow - check the Legacy screen to see this.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "investmentIhtExemptYear",
     label: "Year qualifying for IHT exemption",
@@ -1391,6 +1406,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Enter the year from which this investment qualifies for relief from inheritance tax, if it does.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (AIM/BPR)
   {
     key: "ihtExemptionApplies",
     label: "Qualifies for IHT Relief (BPR/APR)",
@@ -1473,6 +1489,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "investmentDiscountAmount",
     label: "Discount Amount",
@@ -1499,6 +1516,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (AIM/BPR)
   {
     key: "ihtAlternativeMarketApplies",
     label: "Is this an AIM?",
@@ -1512,6 +1530,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "propertyInputCapGainsReliefApplies",
     label: "Gains Qualify for Entrepreneur's Relief",
@@ -1525,6 +1544,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (income tax/bonds)
   {
     key: "investmentLifeFundWithdrawalStrategy",
     label: "Withdrawal Strategy",
@@ -1551,6 +1571,7 @@ window.SHACKADEMY_FIELDS = [
     `,
   },
 
+  // HIGH-RISK: review on regulatory change (ISA)
   {
     key: "specialContributionType",
     label: "Contribution Type",
@@ -1573,6 +1594,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (ISA)
   {
     key: "percentOfSpecialAllowanceContribution",
     label: "Percentage",
@@ -1585,6 +1607,7 @@ window.SHACKADEMY_FIELDS = [
     </ul>
   `,
   },
+  // HIGH-RISK: review on regulatory change (ISA)
   {
     key: "fixedSpecialContributionAmount",
     label: "",
@@ -1597,6 +1620,7 @@ window.SHACKADEMY_FIELDS = [
     </ul>
   `,
   },
+  // HIGH-RISK: review on regulatory change (ISA)
   {
     key: "specialContributionNumYears",
     label: "Number of Years",
@@ -1825,6 +1849,7 @@ window.SHACKADEMY_FIELDS = [
     `,
   },
 
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "capGainsReliefApplies",
     label: "Gains Qualify for Business Asset Disposal Relief",
@@ -2118,6 +2143,7 @@ window.SHACKADEMY_FIELDS = [
 
   // ── Tab: Basics ──────────────────────────────────────────────
 
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "propertyInputAssetType",
     label: "Asset Type",
@@ -2255,6 +2281,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "mainResidenceIhtExemptionApplies",
     label: "Qualifies for Main Residence IHT Exemption",
@@ -2301,6 +2328,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukMoneyPurchaseInputType",
     label: "Type",
@@ -2405,6 +2433,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Toggle this on if you want Voyant to only reference your base salary when calculating contributions as a percentage of income.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "limitContributionsToAllowance",
     label: "Limit Contributions to Allowance",
@@ -2455,6 +2484,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukMoneyPurchaseSSApply",
     label: "Does Salary Sacrifice apply?",
@@ -2473,6 +2503,7 @@ window.SHACKADEMY_FIELDS = [
 
   // ── Tab: Crystallisations ──────────────────────────────────────────────
 
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "crystallisationApplies",
     label: "Apply Crystallisation Instructions",
@@ -2484,6 +2515,7 @@ window.SHACKADEMY_FIELDS = [
 
   // ── Tab: Planned Withdrawals ──────────────────────────────────────────────
 
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "drawdownUspWithdrawStrategy",
     label: "Pension Strategy",
@@ -2580,6 +2612,7 @@ window.SHACKADEMY_FIELDS = [
       <p>Is the annuity guaranteed to pay out for X years, even on death? If so, input the number of years. If not, leave as 0</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "annuityLumpSumPercent",
     label: "Lump Sum",
@@ -3500,6 +3533,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukUnsecuredPensionInputInitialBalance",
     label: "Initial Balance",
@@ -3514,6 +3548,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukUnsecuredPensionTaxStatus",
     label: "Tax Status",
@@ -3559,6 +3594,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "ukStatePensionInputStartAge",
     label: "Start Age",
@@ -3574,6 +3610,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "ukStatePensionInputNormalPensionAge",
     label: "State Pension Age",
@@ -3587,6 +3624,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "ukStatePensionInputAmount",
     label: "Amount",
@@ -3601,6 +3639,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "ukStatePensionInputSecondStateAmount",
     label: "Second Tier State Pension Amount",
@@ -3615,6 +3654,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "ukStatePensionInputGraduatedStatePensionAmount",
     label: "Graduated State Pension Amount",
@@ -3628,6 +3668,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "ukStatePensionUseManualLockRate",
     label: "Manually Enter Escalation Rate",
@@ -3642,6 +3683,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "userEnteredLockRate",
     label: "Manual Escalation Rate",
@@ -4452,6 +4494,7 @@ window.SHACKADEMY_FIELDS = [
   `,
   },
 
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "ukTermProtectionInTrust",
     label: "Policy Held in Trust?",
@@ -4904,6 +4947,7 @@ window.SHACKADEMY_FIELDS = [
   `,
   },
 
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "inTrust-radio1",
     label: "In Trust?",
@@ -5559,6 +5603,7 @@ window.SHACKADEMY_FIELDS = [
 
   // ── Tab: Asset Distribution ──────────────────────────────────
 
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "distributionType",
     label: "Type",
@@ -5579,6 +5624,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "distributionPercent",
     label: "Percentage",
@@ -5694,6 +5740,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (State Pension)
   {
     key: "incomeGrowthRate",
     label: "National Average Earnings",
@@ -5740,6 +5787,7 @@ window.SHACKADEMY_FIELDS = [
       <p>The Retail Price Index rate. Where selected, it can be used to inflate items such as final salary pension and annuity payouts.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (income tax/bonds)
   {
     key: "defaultTaxTableEscalationRate",
     label: "Default Tax Table Assumptions",
@@ -5752,6 +5800,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "ukIHTExemptionEscalationRate",
     label: "Nil Rate Band Escalation",
@@ -5764,6 +5813,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "ukIHTPropertyExemptionEscalationRate",
     label: "IHT Property Exemption Escalation Rate",
@@ -6063,6 +6113,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (income tax/bonds)
   {
     key: "defaultInternalTaxRate",
     label: "Onshore Bond Default Internal Tax Rate",
@@ -6107,6 +6158,7 @@ window.SHACKADEMY_FIELDS = [
 
   // ── Tab: Calculation Settings ─────────────────────────────────
 
+  // HIGH-RISK: review on regulatory change (Lifetime Allowance)
   {
     key: "crystallizeFinalSalaryBeforeMoneyPurchase",
     label: "Crystallise final salary before money purchase",
@@ -6201,6 +6253,7 @@ window.SHACKADEMY_FIELDS = [
       <p>If there's an outstanding tax liability relating to a period before the start of the plan, that is still due to be paid, enter it here.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (income tax/bonds)
   {
     key: "newUserInputProvince",
     label: "Country",
@@ -6229,6 +6282,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukTaxInfoInputPensionMaxTaxFreeCash",
     label: "Maximum Allowed Tax-Free Cash",
@@ -6243,6 +6297,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukTaxInfoInputPensionProtectedAllowanceAmount",
     label: "Remaining LSDBA",
@@ -6256,6 +6311,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukTaxInfoInputPensionProtectedTaxFreeCashAmt",
     label: "Remaining Lump Sum Allowance",
@@ -6269,6 +6325,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (pension allowances/relief)
   {
     key: "ukTaxInfoInputPensionContributionCarryForward",
     label: "Available Pension Contribution Carry Forward",
@@ -6293,6 +6350,7 @@ window.SHACKADEMY_FIELDS = [
       <p>If there's any unused annual gift exemption carried forward from the previous tax year, enter it here.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "ukTaxInfoInputIhtCarryOverPercent",
     label: "IHT Nil Rate Band",
@@ -6306,6 +6364,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "ukTaxInfoInputResidenceNilRateBandCarryOverPercent",
     label: "Residence Nil Rate Band",
@@ -6319,6 +6378,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (AIM/BPR)
   {
     key: "ukTaxInfoInputBprAprCarryoverPct",
     label: "BPR/APR Allowance Carry Forward",
@@ -6331,6 +6391,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "ukTaxInfoInputNilPET",
     label: "Potentially Exempt Transfers",
@@ -6343,6 +6404,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "ukTaxInfoInputNilCLT",
     label: "Chargeable Lifetime Transfers",
@@ -6354,6 +6416,7 @@ window.SHACKADEMY_FIELDS = [
 
   // ── Subheading: Capital Gains ─────────────────────────────────
 
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "ukTaxInfoInputCapitalGainsRealisedYearToDate",
     label: "Capital Gains Realised Year to Date",
@@ -6379,6 +6442,7 @@ window.SHACKADEMY_FIELDS = [
       </ul>
     `,
   },
+  // HIGH-RISK: review on regulatory change (CGT/dividends)
   {
     key: "ukTaxInfoInputEntreprenuersCapGainsRelief",
     label: "Entrepreneur's Relief Claimed to Date",
@@ -6600,6 +6664,7 @@ window.SHACKADEMY_FIELDS = [
       <p>The age at which the crash starts. The default comes from Plan Settings &gt; Major Loss &gt; Default Age.</p>
     `,
   },
+  // HIGH-RISK: review on regulatory change (IHT)
   {
     key: "planSelect",
     sections: ["insight-iht"],
